@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>質感關西8日遊</title>
+    <title>柔和莫蘭迪 - 湖水綠海邊透明版</title>
     
     <!-- React & Babel -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -18,356 +18,304 @@
     
     <style>
         body {
-            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
-            background-attachment: fixed;
-            font-family: 'Helvetica Neue', Arial, 'PingFang TC', 'Heiti TC', 'Microsoft JhengHei', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, 'PingFang TC', sans-serif;
             margin: 0;
             padding: 0;
-            color: #333;
+            color: #4a4a4a; 
+            background-color: #fdfafb;
         }
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.06);
+
+        /* 換成明亮充滿光線的海邊背景 */
+        .bg-image {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
         }
+        
+        /* 降低全域遮罩不透明度，讓背景更顯眼 */
+        .bg-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            z-index: -1;
+        }
+
+        /* 大幅提升卡片透明度 (0.45) */
         .glass-card {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 32px rgba(120, 194, 196, 0.15); /* 陰影改為呼應湖水綠 */
         }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
+        
+        /* 提升導覽列透明度 (0.65) */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: saturate(200%) blur(24px);
+            -webkit-backdrop-filter: saturate(200%) blur(24px);
+            border-top: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 -4px 30px rgba(120, 194, 196, 0.1);
         }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        
+        /* 提升內部小區塊透明度 (0.4) */
+        .glass-inner {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
         }
-        .compact-card:active {
-            transform: scale(0.96);
-        }
+
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .compact-card:active { transform: scale(0.97); }
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;  
+            -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        /* 行程頁面動態主題 CSS 變數支援 */
+        .timeline-line { border-color: var(--theme-border); }
+        .timeline-dot {
+            border-color: var(--theme-border);
+            color: var(--theme-text);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+        }
+        .group:hover .timeline-dot {
+            background-color: var(--theme-main);
+            border-color: var(--theme-main);
+            color: var(--theme-btn-text);
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
     <div id="root"></div>
 
     <script type="text/babel">
+        // --- 莫蘭迪四色系統配置 (主色已換為 #78C2C4) ---
+        const COLORS = {
+            main:   { hex: '#78C2C4', light: 'rgba(120, 194, 196, 0.25)', border: 'rgba(120, 194, 196, 0.6)', text: '#458b8d', btnText: '#FFFFFF' },
+            pink:   { hex: '#FEDFE1', light: 'rgba(254, 223, 225, 0.6)',  border: 'rgba(254, 223, 225, 0.9)', text: '#d16b7a', btnText: '#9e4655' },
+            yellow: { hex: '#FAD689', light: 'rgba(250, 214, 137, 0.25)', border: 'rgba(250, 214, 137, 0.7)', text: '#c79822', btnText: '#8a6408' },
+            green:  { hex: '#A8D8B9', light: 'rgba(168, 216, 185, 0.25)', border: 'rgba(168, 216, 185, 0.6)', text: '#64a17d', btnText: '#3b6e51' }
+        };
+
+        const REGION_COLORS = {
+            '神戶': COLORS.main,
+            '大阪': COLORS.pink,
+            '奈良': COLORS.yellow,
+            '和歌山': COLORS.green
+        };
+
+        const DAY_REGION_MAP = {
+            1: '神戶', 2: '神戶', 3: '神戶', 
+            4: '大阪', 5: '大阪',           
+            6: '奈良',                    
+            7: '和歌山', 8: '和歌山'         
+        };
+
         // --- 旅遊資料數據 ---
-        
         const HOTELS = [
-            { name: "神戶美利堅公園東方大飯店", engName: "Kobe Meriken Park Oriental Hotel", address: "神戶市中央區波止場町5-6", checkIn: "02/16(一)", checkOut: "02/18(三)", nights: 2, roomType: "海景雙人房", tag: "神戶港夜景", icon: "ship" },
-            { name: "有馬溫泉 月光園 遊月山莊", engName: "Gekkoen Yuugetsu Sanso", address: "神戶市北區有馬町318", checkIn: "02/18(三)", checkOut: "02/19(四)", nights: 1, roomType: "和室露天風呂房", tag: "一泊二食", icon: "hot-tub-person" },
-            { name: "大阪本町 質感旅宿", engName: "Hotel in Honmachi", address: "大阪市中央區本町", checkIn: "02/19(四)", checkOut: "02/22(日)", nights: 3, roomType: "高級雙床房", tag: "交通便利", icon: "city" },
-            { name: "和歌山大和ROYNET酒店", engName: "Daiwa Roynet Hotel Wakayama", address: "和歌山市七番丁 26-1", checkIn: "02/22(日)", checkOut: "02/23(一)", nights: 1, roomType: "標準雙床房", tag: "和歌山城旁", icon: "landmark" }
+            { name: "神戶美利堅公園東方大飯店", engName: "Kobe Meriken Park Oriental Hotel", address: "神戶市中央區波止場町5-6", checkIn: "02/16(一)", checkOut: "02/18(三)", nights: 2, roomType: "海景雙人房", tag: "神戶港夜景", icon: "ship", color: COLORS.main },
+            { name: "有馬溫泉 月光園 遊月山莊", engName: "Gekkoen Yuugetsu Sanso", address: "神戶市北區有馬町318", checkIn: "02/18(三)", checkOut: "02/19(四)", nights: 1, roomType: "和室露天風呂房", tag: "一泊二食", icon: "hot-tub-person", color: COLORS.yellow }, 
+            { name: "大阪本町 質感旅宿", engName: "Hotel in Honmachi", address: "大阪市中央區本町", checkIn: "02/19(四)", checkOut: "02/22(日)", nights: 3, roomType: "高級雙床房", tag: "交通便利", icon: "city", color: COLORS.pink },
+            { name: "和歌山大和ROYNET酒店", engName: "Daiwa Roynet Hotel Wakayama", address: "和歌山市七番丁 26-1", checkIn: "02/22(日)", checkOut: "02/23(一)", nights: 1, roomType: "標準雙床房", tag: "和歌山城旁", icon: "landmark", color: COLORS.green }
         ];
 
         const FLIGHTS = {
-            outbound: {
-                title: "去程航班",
-                date: "02/16 (一)",
-                airline: "樂桃航空 Peach",
-                flightNo: "MM064",
-                dep: { time: "12:30", port: "HKG", term: "T1", city: "香港" },
-                arr: { time: "17:10", port: "KIX", term: "T2", city: "大阪(關西)" },
-                duration: "3h 40m"
-            },
-            inbound: {
-                title: "回程航班",
-                date: "02/23 (一)",
-                airline: "樂桃航空 Peach",
-                flightNo: "MM069",
-                dep: { time: "23:00", port: "KIX", term: "T2", city: "大阪(關西)" },
-                arr: { time: "02:00", port: "HKG", term: "T1", city: "香港 (+1天)" },
-                duration: "4h 00m"
-            }
+            outbound: { title: "去程航班", date: "02/16 (一)", airline: "樂桃航空 Peach", flightNo: "MM064", dep: { time: "12:30", port: "HKG", term: "T1", city: "香港" }, arr: { time: "17:10", port: "KIX", term: "T2", city: "大阪(關西)" }, duration: "3h 40m", color: COLORS.main },
+            inbound: { title: "回程航班", date: "02/23 (一)", airline: "樂桃航空 Peach", flightNo: "MM069", dep: { time: "23:00", port: "KIX", term: "T2", city: "大阪(關西)" }, arr: { time: "02:00", port: "HKG", term: "T1", city: "香港 (+1天)" }, duration: "4h 00m", color: COLORS.pink }
         };
 
         const ITINERARY = [
-            {
-                day: 1, date: "02/16(一)", title: "抵達神戶", weather: "晴時多雲 8°C", weatherIcon: "cloud-sun",
-                steps: [
-                    { time: "17:10", title: "抵達關西機場 T2", type: "transport", icon: "plane", detail: "搭乘高速船/巴士前往神戶" },
-                    { time: "19:30", title: "飯店 Check-in", type: "hotel", icon: "bed", detail: "神戶美利堅公園東方大飯店" },
-                    { time: "20:30", title: "神戶港灣夜跑", type: "activity", icon: "person-running", detail: "體驗：沿著美利堅公園至臨海樂園，享受 5-10km 的浪漫海風夜跑" }
-                ]
-            },
-            {
-                day: 2, date: "02/17(二)", title: "神戶文創與百萬夜景", weather: "晴朗 10°C", weatherIcon: "sun",
-                steps: [
-                    { time: "10:00", title: "兵庫縣立美術館", type: "activity", icon: "palette", detail: "安藤忠雄操刀設計，欣賞極簡清水模建築與海景，與巨大「青蘋果」合影" },
-                    { time: "12:30", title: "舊居留地午餐", type: "food", icon: "utensils", detail: "感受歐風歷史建築群與質感咖啡廳" },
-                    { time: "14:30", title: "榮町通散策 (文具與選物)", type: "shop", icon: "pen-nib", detail: "尋寶：隱藏在舊大樓裡的獨立文具店、藝術質感小物與家飾" },
-                    { time: "18:00", title: "摩耶山掬星台", type: "activity", icon: "star", detail: "特別景點：日本三大夜景，極度浪漫" }
-                ]
-            },
-            {
-                day: 3, date: "02/18(三)", title: "前往有馬溫泉", weather: "多雲 7°C", weatherIcon: "cloud",
-                steps: [
-                    { time: "10:00", title: "Check-out", type: "hotel", icon: "bed", detail: "前往三宮站搭乘巴士/電車" },
-                    { time: "11:30", title: "抵達有馬溫泉", type: "transport", icon: "map", detail: "溫泉街老舖巡禮、品嚐炭酸煎餅" },
-                    { time: "15:00", title: "月光園遊月山莊 Check-in", type: "hotel", icon: "bed", detail: "享受房內專屬露天風呂，寫意放鬆" },
-                    { time: "18:00", title: "懷石料理晚餐", type: "food", icon: "utensils", detail: "旅館內享用傳統職人料理" }
-                ]
-            },
-            {
-                day: 4, date: "02/19(四)", title: "老屋聚落與光影藝術", weather: "晴時多雲 9°C", weatherIcon: "cloud-sun",
-                steps: [
-                    { time: "11:00", title: "移動至大阪", type: "transport", icon: "train", detail: "搭乘巴士或電車前往大阪市區" },
-                    { time: "13:00", title: "大阪本町 Check-in", type: "hotel", icon: "bed", detail: "寄放行李" },
-                    { time: "14:00", title: "中崎町散策與調香體驗", type: "activity", icon: "spa", detail: "體驗：探訪復古巷弄，在香氛工坊調製專屬兩人的紀念香水或線香" },
-                    { time: "18:30", title: "TeamLab 長居植物園", type: "activity", icon: "lightbulb", detail: "特別景點：夜間森林沉浸式光影藝術" }
-                ]
-            },
-            {
-                day: 5, date: "02/20(五)", title: "河畔設計與質感生活", weather: "晴朗 11°C", weatherIcon: "sun",
-                steps: [
-                    { time: "10:00", title: "中之島散步", type: "activity", icon: "water", detail: "美術館、童書森林與紅磚公會堂，寫意早晨" },
-                    { time: "13:30", title: "南堀江 (山系與設計選物)", type: "shop", icon: "tent", detail: "逛街：匯集 Patagonia 等戶外山系服飾、潮流運動配件與設計家品" },
-                    { time: "15:30", title: "梅田商圈 (大型文具與運動)", type: "shop", icon: "bag-shopping", detail: "集中採購：前往大型店舖 (如 LOFT/大型體育店) 尋找豐富的美術用品與運動裝備" },
-                    { time: "18:00", title: "梅田藍天大廈", type: "activity", icon: "sun", detail: "空中庭園展望台看夕陽漸層至夜景" }
-                ]
-            },
-            {
-                day: 6, date: "02/21(六)", title: "奈良傳統工藝之美", weather: "晴朗 12°C", weatherIcon: "sun",
-                steps: [
-                    { time: "09:00", title: "出發前往奈良", type: "transport", icon: "train", detail: "從大阪難波搭乘近鐵" },
-                    { time: "10:00", title: "東大寺與奈良公園", type: "activity", icon: "paw", detail: "世界遺產大佛殿巡禮、晨間與小鹿互動" },
-                    { time: "13:30", title: "若草山絕景行山", type: "activity", icon: "person-hiking", detail: "體驗：漫步登上開闊的草地山坡，與小鹿相伴，俯瞰奈良古都全景" },
-                    { time: "15:30", title: "鹿猿狐包袱小路", type: "shop", icon: "gift", detail: "中川政七旗艦店：日本工藝生活家品" },
-                    { time: "17:00", title: "奈良町茶道與和菓子", type: "activity", icon: "bowl-food", detail: "體驗：在百年町家內參與傳統茶道，親手製作和菓子" },
-                    { time: "18:30", title: "返回大阪", type: "transport", icon: "train", detail: "滿載而歸，享用晚餐" }
-                ]
-            },
-            {
-                day: 7, date: "02/22(日)", title: "文化與海之和歌山", weather: "晴時多雲 13°C", weatherIcon: "cloud-sun",
-                steps: [
-                    { time: "09:30", title: "前往和歌山", type: "transport", icon: "train", detail: "Check-out，搭乘特急列車前往和歌山" },
-                    { time: "11:00", title: "飯店寄放行李", type: "hotel", icon: "bed", detail: "和歌山大和ROYNET酒店" },
-                    { time: "12:00", title: "黑潮市場", type: "food", icon: "utensils", detail: "品嚐新鮮海鮮丼、觀看黑鮪魚解體秀" },
-                    { time: "14:30", title: "黑江老街與蒔繪體驗", type: "activity", icon: "paintbrush", detail: "體驗：漫步傳統漆器老街，並親手體驗「蒔繪」金箔彩繪工藝" },
-                    { time: "16:30", title: "和歌山城散步", type: "activity", icon: "landmark", detail: "夕陽下的名城庭園與天守閣，寫意浪漫" },
-                    { time: "18:30", title: "井出商店", type: "food", icon: "utensils", detail: "晚餐：品嚐全日本知名的正宗和歌山拉麵" }
-                ]
-            },
-            {
-                day: 8, date: "02/23(一)", title: "小鎮風情與踏上歸途", weather: "晴朗 14°C", weatherIcon: "sun",
-                steps: [
-                    { time: "09:00", title: "Check-out", type: "hotel", icon: "bed", detail: "將行李寄放於飯店櫃台" },
-                    { time: "10:00", title: "和歌山電鐵貴志川線", type: "activity", icon: "train-tram", detail: "搭乘特色列車探訪超萌「二代玉」貓咪站長" },
-                    { time: "13:30", title: "雜賀崎漁港", type: "activity", icon: "camera", detail: "有「日本阿瑪菲」之稱的浪漫復古海岸" },
-                    { time: "15:00", title: "海邊絕景咖啡廳", type: "cafe", icon: "mug-hot", detail: "享受旅行最後的看海放空時光 (如：Epicharis)" },
-                    { time: "16:30", title: "前往臨空城", type: "transport", icon: "train", detail: "領取行李，搭乘電車前往臨空城 (Rinku Town)" },
-                    { time: "17:30", title: "臨空城 Outlet", type: "shop", icon: "bag-shopping", detail: "最後血拼：集中掃貨各大運動品牌的跑步、網球鞋與服飾" },
-                    { time: "20:30", title: "抵達關西機場", type: "activity", icon: "plane-departure", detail: "辦理報到、免稅店最後採購物產與伴手禮" },
-                    { time: "23:00", title: "搭乘 MM069 航班", type: "transport", icon: "plane", detail: "帶著滿滿回憶返回，於 02/24 凌晨抵達" }
-                ]
-            }
+            { day: 1, date: "02/16(一)", title: "抵達神戶", weather: "晴時多雲 8°C", weatherIcon: "cloud-sun", steps: [{ time: "17:10", title: "抵達關西機場 T2", type: "transport", icon: "plane", detail: "搭乘高速船/巴士前往神戶" }, { time: "19:30", title: "飯店 Check-in", type: "hotel", icon: "bed", detail: "神戶美利堅公園東方大飯店" }, { time: "20:30", title: "神戶港灣夜跑", type: "activity", icon: "person-running", detail: "體驗：沿著美利堅公園至臨海樂園，享受 5-10km 的浪漫海風夜跑" }] },
+            { day: 2, date: "02/17(二)", title: "神戶文創與百萬夜景", weather: "晴朗 10°C", weatherIcon: "sun", steps: [{ time: "10:00", title: "兵庫縣立美術館", type: "activity", icon: "palette", detail: "安藤忠雄操刀設計，欣賞極簡清水模建築與海景，與巨大「青蘋果」合影" }, { time: "12:30", title: "舊居留地午餐", type: "food", icon: "utensils", detail: "感受歐風歷史建築群與質感咖啡廳" }, { time: "14:30", title: "榮町通散策", type: "shop", icon: "pen-nib", detail: "尋寶：隱藏在舊大樓裡的獨立文具店、藝術質感小物與家飾" }, { time: "18:00", title: "摩耶山掬星台", type: "activity", icon: "star", detail: "特別景點：日本三大夜景，極度浪漫" }] },
+            { day: 3, date: "02/18(三)", title: "前往有馬溫泉", weather: "多雲 7°C", weatherIcon: "cloud", steps: [{ time: "10:00", title: "Check-out", type: "hotel", icon: "bed", detail: "前往三宮站搭乘巴士/電車" }, { time: "11:30", title: "抵達有馬溫泉", type: "transport", icon: "map", detail: "溫泉街老舖巡禮、品嚐炭酸煎餅" }, { time: "15:00", title: "月光園遊月山莊 Check-in", type: "hotel", icon: "bed", detail: "享受房內專屬露天風呂，寫意放鬆" }, { time: "18:00", title: "懷石料理晚餐", type: "food", icon: "utensils", detail: "旅館內享用傳統職人料理" }] },
+            { day: 4, date: "02/19(四)", title: "老屋聚落與光影藝術", weather: "晴時多雲 9°C", weatherIcon: "cloud-sun", steps: [{ time: "11:00", title: "移動至大阪", type: "transport", icon: "train", detail: "搭乘巴士或電車前往大阪市區" }, { time: "13:00", title: "大阪本町 Check-in", type: "hotel", icon: "bed", detail: "寄放行李" }, { time: "14:00", title: "中崎町散策與調香體驗", type: "activity", icon: "spa", detail: "體驗：探訪復古巷弄，在香氛工坊調製專屬兩人的紀念香水或線香" }, { time: "18:30", title: "TeamLab 長居植物園", type: "activity", icon: "lightbulb", detail: "特別景點：夜間森林沉浸式光影藝術" }] },
+            { day: 5, date: "02/20(五)", title: "河畔設計與質感生活", weather: "晴朗 11°C", weatherIcon: "sun", steps: [{ time: "10:00", title: "中之島散步", type: "activity", icon: "water", detail: "美術館、童書森林與紅磚公會堂，寫意早晨" }, { time: "13:30", title: "南堀江", type: "shop", icon: "tent", detail: "逛街：匯集 Patagonia 等戶外山系服飾、潮流運動配件與設計家品" }, { time: "15:30", title: "梅田商圈", type: "shop", icon: "bag-shopping", detail: "集中採購：前往大型店舖 (如 LOFT/大型體育店) 尋找豐富的美術用品與運動裝備" }, { time: "18:00", title: "梅田藍天大廈", type: "activity", icon: "sun", detail: "空中庭園展望台看夕陽漸層至夜景" }] },
+            { day: 6, date: "02/21(六)", title: "奈良傳統工藝之美", weather: "晴朗 12°C", weatherIcon: "sun", steps: [{ time: "09:00", title: "出發前往奈良", type: "transport", icon: "train", detail: "從大阪難波搭乘近鐵" }, { time: "10:00", title: "東大寺與奈良公園", type: "activity", icon: "paw", detail: "世界遺產大佛殿巡禮、晨間與小鹿互動" }, { time: "13:30", title: "若草山絕景行山", type: "activity", icon: "person-hiking", detail: "體驗：漫步登上開闊的草地山坡，與小鹿相伴，俯瞰奈良古都全景" }, { time: "15:30", title: "鹿猿狐包袱小路", type: "shop", icon: "gift", detail: "中川政七旗艦店：日本工藝生活家品" }, { time: "17:00", title: "奈良町茶道與和菓子", type: "activity", icon: "bowl-food", detail: "體驗：在百年町家內參與傳統茶道，親手製作和菓子" }, { time: "18:30", title: "返回大阪", type: "transport", icon: "train", detail: "滿載而歸，享用晚餐" }] },
+            { day: 7, date: "02/22(日)", title: "文化與海之和歌山", weather: "晴時多雲 13°C", weatherIcon: "cloud-sun", steps: [{ time: "09:30", title: "前往和歌山", type: "transport", icon: "train", detail: "Check-out，搭乘特急列車前往和歌山" }, { time: "11:00", title: "飯店寄放行李", type: "hotel", icon: "bed", detail: "和歌山大和ROYNET酒店" }, { time: "12:00", title: "黑潮市場", type: "food", icon: "utensils", detail: "品嚐新鮮海鮮丼、觀看黑鮪魚解體秀" }, { time: "14:30", title: "黑江老街與蒔繪體驗", type: "activity", icon: "paintbrush", detail: "體驗：漫步傳統漆器老街，並親手體驗「蒔繪」金箔彩繪工藝" }, { time: "16:30", title: "和歌山城散步", type: "activity", icon: "landmark", detail: "夕陽下的名城庭園與天守閣，寫意浪漫" }, { time: "18:30", title: "井出商店", type: "food", icon: "utensils", detail: "晚餐：品嚐全日本知名的正宗和歌山拉麵" }] },
+            { day: 8, date: "02/23(一)", title: "小鎮風情與踏上歸途", weather: "晴朗 14°C", weatherIcon: "sun", steps: [{ time: "09:00", title: "Check-out", type: "hotel", icon: "bed", detail: "將行李寄放於飯店櫃台" }, { time: "10:00", title: "和歌山電鐵貴志川線", type: "activity", icon: "train-tram", detail: "搭乘特色列車探訪超萌「二代玉」貓咪站長" }, { time: "13:30", title: "雜賀崎漁港", type: "activity", icon: "camera", detail: "有「日本阿瑪菲」之稱的浪漫復古海岸" }, { time: "15:00", title: "海邊絕景咖啡廳", type: "cafe", icon: "mug-hot", detail: "享受旅行最後的看海放空時光 (如：Epicharis)" }, { time: "16:30", title: "前往臨空城", type: "transport", icon: "train", detail: "領取行李，搭乘電車前往臨空城 (Rinku Town)" }, { time: "17:30", title: "臨空城 Outlet", type: "shop", icon: "bag-shopping", detail: "最後血拼：集中掃貨各大運動品牌的跑步、網球鞋與服飾" }, { time: "20:30", title: "抵達關西機場", type: "activity", icon: "plane-departure", detail: "辦理報到、免稅店最後採購物產與伴手禮" }, { time: "23:00", title: "搭乘 MM069 航班", type: "transport", icon: "plane", detail: "帶著滿滿回憶返回，於 02/24 凌晨抵達" }] }
         ];
 
-        // 將新增的 4 個景點改為「待排程」並置頂
         const SAVED_SPOTS = [
-            // 待排程區塊
-            { id: 11, name: "相樂園會館 The Sorakuen", category: "Food", icon: "seedling", region: "神戶", tags: ["現代玻璃", "百年園林"], note: "六千坪日式庭園內的極簡玻璃法日餐廳", day: "待排程" },
-            { id: 12, name: "相生芳 Aioifuku", category: "Food", icon: "house-chimney", region: "大阪", tags: ["傳統名門", "懷石料理"], note: "隱身水都市區的百年料亭，展現豪門靜謐", day: "待排程" },
-            { id: 13, name: "菊水樓 Kikusuiro", category: "Food", icon: "leaf", region: "奈良", tags: ["歷史建築", "懷石料理"], note: "接待皇室之名門料亭，挑高落地窗直面綠意", day: "待排程" },
-            { id: 14, name: "Hotel de Yoshino", category: "Food", icon: "wine-glass", region: "和歌山", tags: ["古城景觀", "頂級法餐"], note: "平視和歌山城天守閣，傳奇主廚坐鎮", day: "待排程" },
-            
-            // 已排程區塊
-            { id: 1, name: "榮町通 Sakaemachi", category: "Shop", icon: "pen-nib", region: "神戶", tags: ["文具", "選物"], note: "隱藏舊大樓的特色小店", day: "Day 2" },
-            { id: 2, name: "TeamLab Botanical Garden", category: "Sight", icon: "lightbulb", region: "大阪", tags: ["夜間光影", "浪漫"], note: "植物園內的沉浸式夢幻藝術", day: "Day 4" },
-            { id: 3, name: "南堀江 Orange Street", category: "Shop", icon: "tent", region: "大阪", tags: ["山系服飾", "家品"], note: "網羅戶外品牌與質感傢俱", day: "Day 5" },
-            { id: 4, name: "梅田 LOFT / Tokyu Hands", category: "Shop", icon: "paintbrush", region: "大阪", tags: ["美術", "文具"], note: "一站買齊所有繪畫與設計工具", day: "Day 5" },
-            { id: 5, name: "若草山行山路線", category: "Experience", icon: "person-hiking", region: "奈良", tags: ["行山", "絕景"], note: "浪漫草地山坡，與鹿共賞全景", day: "Day 6" },
-            { id: 6, name: "中川政七商店 奈良本店", category: "Shop", icon: "gift", region: "奈良", tags: ["工藝家品", "選物"], note: "絕美複合空間，生活道具必逛", day: "Day 6" },
-            { id: 7, name: "紀州漆器 蒔繪體驗", category: "Experience", icon: "paintbrush", region: "和歌山", tags: ["手作", "工藝"], note: "體驗優雅的金粉彩繪工藝", day: "Day 7" },
-            { id: 8, name: "和歌山城", category: "Sight", icon: "landmark", region: "和歌山", tags: ["歷史建築", "庭園"], note: "日本百大名城，夕陽時分散步", day: "Day 7" },
-            { id: 9, name: "雜賀崎漁港", category: "Sight", icon: "camera", region: "和歌山", tags: ["海景", "浪漫"], note: "日本阿瑪菲，依山傍海的漁村", day: "Day 8" },
-            { id: 10, name: "臨空城 Premium Outlets", category: "Shop", icon: "shoe-prints", region: "大阪", tags: ["運動品牌", "血拼"], note: "登機前採購，匯集運動服飾", day: "Day 8" }
+            { id: 1, name: "榮町通 Sakaemachi", category: "Shop", icon: "pen-nib", region: "神戶", tags: ["文具"], note: "隱藏舊大樓的特色小店", day: "Day 2" },
+            { id: 11, name: "相樂園會館", category: "Food", icon: "seedling", region: "神戶", tags: ["百年園林"], note: "六千坪日式庭園內的極簡玻璃餐廳", day: "待排程" },
+            { id: 2, name: "TeamLab Botanical Garden", category: "Sight", icon: "lightbulb", region: "大阪", tags: ["夜間光影"], note: "植物園內的沉浸式夢幻藝術", day: "Day 4" },
+            { id: 3, name: "南堀江 Orange Street", category: "Shop", icon: "tent", region: "大阪", tags: ["山系服飾"], note: "網羅戶外品牌與質感傢俱", day: "Day 5" },
+            { id: 4, name: "梅田 LOFT", category: "Shop", icon: "paintbrush", region: "大阪", tags: ["美術"], note: "一站買齊所有繪畫與設計工具", day: "Day 5" },
+            { id: 10, name: "臨空城 Outlets", category: "Shop", icon: "shoe-prints", region: "大阪", tags: ["血拼"], note: "登機前採購，匯集運動服飾", day: "Day 8" },
+            { id: 12, name: "相生芳 Aioifuku", category: "Food", icon: "house-chimney", region: "大阪", tags: ["懷石料理"], note: "隱身市區的百年料亭，展現靜謐", day: "待排程" },
+            { id: 5, name: "若草山行山路線", category: "Experience", icon: "person-hiking", region: "奈良", tags: ["行山"], note: "浪漫草地山坡，與鹿共賞全景", day: "Day 6" },
+            { id: 6, name: "中川政七商店", category: "Shop", icon: "gift", region: "奈良", tags: ["家品"], note: "絕美複合空間，生活道具必逛", day: "Day 6" },
+            { id: 13, name: "菊水樓 Kikusuiro", category: "Food", icon: "leaf", region: "奈良", tags: ["歷史建築"], note: "接待皇室名門，挑高落地窗直面綠意", day: "待排程" },
+            { id: 7, name: "紀州漆器 蒔繪", category: "Experience", icon: "paintbrush", region: "和歌山", tags: ["手作"], note: "體驗優雅的金粉彩繪工藝", day: "Day 7" },
+            { id: 8, name: "和歌山城", category: "Sight", icon: "landmark", region: "和歌山", tags: ["歷史"], note: "日本百大名城，夕陽時分散步", day: "Day 7" },
+            { id: 9, name: "雜賀崎漁港", category: "Sight", icon: "camera", region: "和歌山", tags: ["海景"], note: "日本阿瑪菲，依山傍海的漁村", day: "Day 8" },
+            { id: 14, name: "Hotel de Yoshino", category: "Food", icon: "wine-glass", region: "和歌山", tags: ["頂級法餐"], note: "平視和歌山城天守閣，傳奇主廚坐鎮", day: "待排程" }
         ];
 
         const App = () => {
-            const [activeTab, setActiveTab] = React.useState('saved'); 
+            const [activeTab, setActiveTab] = React.useState('itinerary'); 
             const [activeDay, setActiveDay] = React.useState(1);
 
-            const getRegionColor = (region) => {
-                switch(region) {
-                    case '神戶': return 'bg-blue-50 text-blue-600 border-blue-200';
-                    case '大阪': return 'bg-orange-50 text-orange-600 border-orange-200';
-                    case '奈良': return 'bg-green-50 text-green-600 border-green-200';
-                    case '和歌山': return 'bg-teal-50 text-teal-600 border-teal-200';
-                    default: return 'bg-stone-50 text-stone-600 border-stone-200';
-                }
+            const FlightCard = ({ data }) => {
+                const theme = data.color;
+                return (
+                    <div className="glass-card rounded-[32px] p-6 relative overflow-hidden mb-6">
+                        <div className="flex justify-between items-center border-b border-black/5 pb-4 mb-5">
+                            <div className="flex items-center gap-3">
+                                <div 
+                                    className="w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+                                    style={{ backgroundColor: theme.hex, color: theme.btnText, boxShadow: `0 4px 12px ${theme.light}` }}
+                                >
+                                    <i className={`fa-solid ${data.title === "去程航班" ? "fa-plane-departure" : "fa-plane-arrival"} text-lg`}></i>
+                                </div>
+                                <h3 className="font-bold text-slate-800 text-xl tracking-tight">{data.title}</h3>
+                            </div>
+                            <span 
+                                className="text-sm font-bold glass-inner px-3 py-1.5 rounded-xl text-slate-700"
+                            >{data.date}</span>
+                        </div>
+
+                        <div className="flex justify-between items-center mb-2">
+                            <div className="text-center w-24">
+                                <p className="text-4xl font-black text-slate-800 tracking-tighter">{data.dep.time}</p>
+                                <p className="text-base font-bold mt-2" style={{ color: theme.text }}>{data.dep.port}</p>
+                                <p className="text-sm text-slate-600 mt-1">{data.dep.city} ({data.dep.term})</p>
+                            </div>
+                            
+                            <div className="flex-1 px-4 flex flex-col items-center">
+                                <p className="text-sm text-slate-600 font-medium mb-1.5">{data.duration}</p>
+                                <div className="w-full relative flex items-center justify-center">
+                                    <div className="h-[2px] w-full absolute top-1/2 -translate-y-1/2 rounded-full" style={{ backgroundColor: theme.light }}></div>
+                                    <i className="fa-solid fa-plane text-lg relative z-10 bg-transparent px-2" style={{ color: theme.border }}></i>
+                                </div>
+                                <p className="text-sm font-bold mt-2" style={{ color: theme.text }}>{data.airline} {data.flightNo}</p>
+                            </div>
+
+                            <div className="text-center w-24">
+                                <p className="text-4xl font-black text-slate-800 tracking-tighter">{data.arr.time}</p>
+                                <p className="text-base font-bold mt-2" style={{ color: theme.text }}>{data.arr.port}</p>
+                                <p className="text-sm text-slate-600 mt-1">{data.arr.city} ({data.arr.term})</p>
+                            </div>
+                        </div>
+                    </div>
+                );
             };
 
-            const FlightCard = ({ data }) => (
-                <div className="glass-card rounded-2xl p-5 relative overflow-hidden mb-4">
-                    <div className="flex justify-between items-center border-b border-white/50 pb-3 mb-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-stone-800 text-white flex items-center justify-center">
-                                <i className={`fa-solid ${data.title === "去程航班" ? "fa-plane-departure" : "fa-plane-arrival"} text-sm`}></i>
-                            </div>
-                            <h3 className="font-bold text-stone-800">{data.title}</h3>
-                        </div>
-                        <span className="text-xs font-bold text-stone-500 bg-white/60 px-2 py-1 rounded-md">{data.date}</span>
-                    </div>
-
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="text-center">
-                            <p className="text-3xl font-black text-stone-800">{data.dep.time}</p>
-                            <p className="text-sm font-bold text-stone-600 mt-1">{data.dep.port}</p>
-                            <p className="text-[10px] text-stone-500 mt-0.5">{data.dep.city} ({data.dep.term})</p>
-                        </div>
-                        
-                        <div className="flex-1 px-4 flex flex-col items-center">
-                            <p className="text-[10px] text-stone-400 mb-1">{data.duration}</p>
-                            <div className="w-full relative flex items-center justify-center">
-                                <div className="h-[2px] bg-stone-300 w-full absolute top-1/2 -translate-y-1/2"></div>
-                                <i className="fa-solid fa-plane text-stone-400 relative z-10 bg-transparent px-1 transform rotate-0"></i>
-                            </div>
-                            <p className="text-[10px] font-bold text-indigo-600 mt-1">{data.airline} {data.flightNo}</p>
-                        </div>
-
-                        <div className="text-center">
-                            <p className="text-3xl font-black text-stone-800">{data.arr.time}</p>
-                            <p className="text-sm font-bold text-stone-600 mt-1">{data.arr.port}</p>
-                            <p className="text-[10px] text-stone-500 mt-0.5">{data.arr.city} ({data.arr.term})</p>
-                        </div>
-                    </div>
-                </div>
-            );
-
-            const BaggageCard = () => (
-                <div className="glass-card rounded-2xl p-4 relative overflow-hidden mt-2 mb-4">
-                    <div className="flex items-center justify-between mb-4 px-1">
-                        <div className="flex items-center gap-2">
-                            <i className="fa-solid fa-suitcase-rolling text-stone-700"></i>
-                            <h3 className="font-bold text-stone-800 text-sm">行李限額</h3>
-                        </div>
-                        <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">樂桃航空</span>
-                    </div>
-
-                    <div className="flex gap-3">
-                        <div className="flex-1 bg-white/60 rounded-xl p-3 border border-white flex flex-col items-center">
-                            <i className="fa-solid fa-bag-shopping text-2xl text-stone-500 mb-2 mt-1"></i>
-                            <span className="font-bold text-stone-800 text-[13px] mb-2">手提行李</span>
-                            
-                            <div className="w-full space-y-1.5">
-                                <div className="flex items-center justify-center gap-2 text-[11px] text-stone-600 font-bold bg-white py-1.5 rounded-lg shadow-sm border border-stone-100">
-                                    <i className="fa-solid fa-weight-scale text-stone-400"></i> 7 kg
-                                </div>
-                                <div className="flex items-center justify-center gap-2 text-[11px] text-stone-600 font-bold bg-white py-1.5 rounded-lg shadow-sm border border-stone-100">
-                                    <i className="fa-solid fa-boxes-stacked text-stone-400"></i> 2 件
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex-1 bg-white/60 rounded-xl p-3 border border-white flex flex-col items-center">
-                            <i className="fa-solid fa-suitcase text-2xl text-stone-500 mb-2 mt-1"></i>
-                            <span className="font-bold text-stone-800 text-[13px] mb-2">託運行李</span>
-                            
-                            <div className="w-full space-y-1.5">
-                                <div className="flex items-center justify-center gap-2 text-[11px] text-stone-600 font-bold bg-white py-1.5 rounded-lg shadow-sm border border-stone-100">
-                                    <i className="fa-solid fa-weight-scale text-stone-400"></i> 20 kg
-                                </div>
-                                <div className="flex items-center justify-center gap-2 text-[11px] text-stone-600 font-bold bg-white py-1.5 rounded-lg shadow-sm border border-stone-100">
-                                    <i className="fa-solid fa-box text-stone-400"></i> 1 件
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-
             const renderFlights = () => (
-                <div className="px-6 pb-8">
-                    <h2 className="text-xl font-bold text-stone-800 mb-4 pl-1">航班資訊</h2>
+                <div className="px-6 pb-8 pt-2">
                     <FlightCard data={FLIGHTS.outbound} />
                     <FlightCard data={FLIGHTS.inbound} />
-                    <BaggageCard />
                 </div>
             );
 
             const renderAccommodations = () => (
-                <div className="px-6 pb-8 space-y-4">
-                    <h2 className="text-xl font-bold text-stone-800 mb-4 pl-1">住宿安排</h2>
-                    <div className="space-y-3">
-                        {HOTELS.map((hotel, idx) => (
-                            <div key={idx} className="glass-card rounded-2xl p-4 flex gap-4 items-start transition-transform hover:scale-[1.01]">
-                                <div className="w-11 h-11 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 flex-shrink-0 shadow-sm border border-indigo-100">
-                                    <i className={`fa-solid fa-${hotel.icon || 'bed'} text-lg`}></i>
+                <div className="px-6 pb-8 pt-2 space-y-5">
+                    {HOTELS.map((hotel, idx) => {
+                        const theme = hotel.color;
+                        return (
+                            <div key={idx} className="glass-card rounded-[32px] p-5 flex gap-5 items-start transition-transform hover:scale-[1.01]">
+                                <div 
+                                    className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 border"
+                                    style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}
+                                >
+                                    <i className={`fa-solid fa-${hotel.icon} text-2xl`}></i>
                                 </div>
-                                <div>
-                                    <h4 className="font-bold text-stone-800 leading-tight mb-0.5">{hotel.name}</h4>
-                                    <p className="text-[11px] text-stone-400 mb-2">{hotel.engName}</p>
-                                    <p className="text-xs text-stone-600 mb-2 flex items-center"><i className="fa-solid fa-location-dot mr-1.5 text-stone-400"></i>{hotel.address}</p>
-                                    <div className="flex flex-wrap gap-2 text-[11px] font-medium">
-                                        <span className="bg-white/80 px-2 py-1 rounded text-stone-600 border border-white font-bold">{hotel.checkIn} - {hotel.checkOut} ({hotel.nights}晚)</span>
-                                        <span className="bg-indigo-50 text-indigo-600 px-2 py-1 rounded border border-indigo-100">{hotel.tag}</span>
+                                <div className="flex-1 pt-1">
+                                    <h4 className="font-bold text-slate-800 text-xl leading-tight mb-1">{hotel.name}</h4>
+                                    <p className="text-sm text-slate-600 mb-3 font-medium">{hotel.engName}</p>
+                                    <p className="text-sm text-slate-700 mb-3 flex items-center font-bold">
+                                        <i className="fa-solid fa-location-dot mr-2" style={{ color: theme.text }}></i>
+                                        {hotel.address}
+                                    </p>
+                                    <div className="flex flex-wrap gap-2 text-sm font-bold">
+                                        <span className="glass-inner px-3 py-1.5 rounded-xl text-slate-700">{hotel.checkIn} - {hotel.checkOut} ({hotel.nights}晚)</span>
                                     </div>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        );
+                    })}
                 </div>
             );
 
             const renderItinerary = () => {
                 const dayPlan = ITINERARY.find(d => d.day === activeDay);
+                const theme = REGION_COLORS[DAY_REGION_MAP[activeDay]];
+                
                 return (
-                    <div className="flex flex-col">
+                    <div className="flex flex-col pt-2" style={{
+                        '--theme-main': theme.hex,
+                        '--theme-light': theme.light,
+                        '--theme-text': theme.text,
+                        '--theme-border': theme.border,
+                        '--theme-btn-text': theme.btnText
+                    }}>
                         <div className="w-full overflow-x-auto scrollbar-hide">
-                            <div className="flex gap-2 px-6 pb-4 w-max">
-                                {ITINERARY.map((item) => (
-                                    <button
-                                        key={item.day}
-                                        onClick={() => setActiveDay(item.day)}
-                                        className={`flex-shrink-0 px-2 py-2 rounded-xl text-sm transition-all duration-300 flex flex-col items-center w-[76px] border ${
-                                            activeDay === item.day 
-                                            ? 'bg-stone-800 text-white border-stone-800 shadow-md transform scale-105' 
-                                            : 'bg-white/60 text-stone-500 border-white hover:bg-white/90'
-                                        }`}
-                                    >
-                                        <span className="text-xs font-bold mb-0.5">Day {item.day}</span>
-                                        <span className="text-[10px] opacity-80">{item.date.split('(')[0]}</span>
-                                    </button>
-                                ))}
+                            <div className="flex gap-3 px-6 pb-6 w-max">
+                                {ITINERARY.map((item) => {
+                                    const itemTheme = REGION_COLORS[DAY_REGION_MAP[item.day]];
+                                    const isActive = activeDay === item.day;
+                                    return (
+                                        <button
+                                            key={item.day}
+                                            onClick={() => setActiveDay(item.day)}
+                                            className={`flex-shrink-0 px-3 py-3 rounded-[20px] transition-all duration-300 flex flex-col items-center w-[88px] border ${
+                                                isActive ? 'shadow-md transform scale-105' : 'glass-inner text-slate-600 hover:bg-white/60'
+                                            }`}
+                                            style={isActive ? {
+                                                backgroundColor: itemTheme.hex,
+                                                borderColor: itemTheme.hex,
+                                                color: itemTheme.btnText,
+                                                boxShadow: `0 4px 12px ${itemTheme.light}`
+                                            } : {}}
+                                        >
+                                            <span className="text-base font-bold mb-1 tracking-tight">Day {item.day}</span>
+                                            <span className="text-sm font-medium opacity-80">{item.date.split('(')[0]}</span>
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 
                         <div className="px-6 pb-8">
-                            <div className="glass-card rounded-2xl p-5">
-                                <div className="flex justify-between items-start mb-6">
+                            <div className="glass-card rounded-[32px] p-6">
+                                <div className="flex justify-between items-start mb-8">
                                     <div>
-                                        <h2 className="text-xl font-bold text-stone-800 mb-1">{dayPlan.title}</h2>
-                                        <p className="text-stone-500 text-sm font-medium">{dayPlan.date}</p>
+                                        <h2 className="text-2xl font-bold text-slate-800 mb-2 tracking-tight">{dayPlan.title}</h2>
+                                        <p className="text-base font-bold" style={{ color: theme.text }}>{dayPlan.date}</p>
                                     </div>
-                                    <div className="text-center bg-white/60 px-3 py-2 rounded-xl shadow-sm border border-white/50">
-                                        <i className={`fa-solid fa-${dayPlan.weatherIcon} text-xl text-stone-700 mb-1`}></i>
-                                        <p className="text-[10px] text-stone-600 font-bold">{dayPlan.weather}</p>
+                                    <div className="text-center glass-inner px-4 py-3 rounded-[20px]">
+                                        <i className={`fa-solid fa-${dayPlan.weatherIcon} text-2xl mb-2`} style={{ color: theme.text }}></i>
+                                        <p className="text-sm text-slate-700 font-bold">{dayPlan.weather.split(' ')[0]}</p>
                                     </div>
                                 </div>
 
-                                <div className="relative border-l-2 border-stone-300 ml-4 pl-6 space-y-6 mt-2">
+                                <div className="relative border-l-[2px] ml-5 pl-8 space-y-8 mt-4 timeline-line">
                                     {dayPlan.steps.map((step, idx) => (
                                         <div key={idx} className="relative group">
-                                            <div className="absolute -left-[35px] bg-stone-800 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-md border-2 border-white transition-transform group-hover:scale-110">
-                                                <i className={`fa-solid fa-${step.icon} text-xs`}></i>
+                                            <div className="absolute -left-[53px] w-10 h-10 rounded-full flex items-center justify-center shadow-sm border-[2px] timeline-dot">
+                                                <i className={`fa-solid fa-${step.icon} text-[15px]`}></i>
                                             </div>
-                                            <div className="bg-white/70 rounded-xl p-3.5 shadow-sm border border-white/60 transition-colors group-hover:bg-white">
-                                                <div className="flex items-center gap-2 mb-1.5">
-                                                    <span className="text-stone-800 font-bold text-sm bg-stone-100 px-1.5 py-0.5 rounded">{step.time}</span>
-                                                    <span className="text-stone-800 font-bold text-sm">{step.title}</span>
+                                            <div className="glass-inner rounded-[24px] p-4 transition-colors group-hover:bg-white/60">
+                                                <div className="flex items-center gap-3 mb-1.5">
+                                                    <span className="text-slate-600 font-bold text-sm">{step.time}</span>
+                                                    <span className="text-slate-800 font-bold text-base">{step.title}</span>
                                                 </div>
-                                                <p className="text-xs text-stone-600 leading-relaxed">{step.detail}</p>
+                                                <p className="text-[15px] text-slate-600 font-medium leading-relaxed">{step.detail}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -378,86 +326,102 @@
                 );
             };
 
-            const renderSavedSpots = () => (
-                <div className="px-5 pb-8">
-                    <div className="flex justify-between items-end mb-4 pl-1 pr-1">
-                        <h2 className="text-xl font-bold text-stone-800">我的收藏清單</h2>
-                        <span className="text-xs text-stone-500 font-medium pb-0.5"><i className="fa-solid fa-arrow-down-short-wide mr-1"></i>依狀態排序</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                        {SAVED_SPOTS.map((spot) => (
-                            <div key={spot.id} className="compact-card glass-card rounded-2xl p-3.5 flex flex-col aspect-square relative cursor-pointer hover:bg-white/90">
-                                
-                                <div className="flex justify-between items-start mb-2">
-                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-[15px] border shadow-sm bg-white ${getRegionColor(spot.region)}`}>
-                                        <i className={`fa-solid fa-${spot.icon}`}></i>
-                                    </div>
-                                    <div className="flex flex-col items-end gap-1">
-                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-md border font-bold ${getRegionColor(spot.region)}`}>
-                                            <i className="fa-solid fa-location-dot mr-1"></i>{spot.region}
-                                        </span>
-                                        {/* 依照是否待排程變換標籤顏色 */}
-                                        <span className={`text-[9px] px-1.5 py-0.5 rounded shadow-sm font-bold ${spot.day === '待排程' ? 'bg-stone-200 text-stone-500 border border-stone-300' : 'bg-stone-800 text-white'}`}>
-                                            {spot.day}
-                                        </span>
-                                    </div>
-                                </div>
+            const renderSavedSpots = () => {
+                const sortedSpots = [...SAVED_SPOTS].sort((a, b) => {
+                    const regionOrder = { "神戶": 1, "大阪": 2, "奈良": 3, "和歌山": 4 };
+                    const regionA = regionOrder[a.region] || 99;
+                    const regionB = regionOrder[b.region] || 99;
+                    if (regionA !== regionB) return regionA - regionB;
+                    const dayA = a.day === "待排程" ? "Day 99" : a.day;
+                    const dayB = b.day === "待排程" ? "Day 99" : b.day;
+                    return dayA.localeCompare(dayB);
+                });
 
-                                <div className="flex-1 mt-1 flex flex-col justify-start">
-                                    <h3 className="font-bold text-stone-800 text-sm leading-tight line-clamp-2 mb-1.5">{spot.name}</h3>
-                                    <p className="text-[10px] text-stone-500 leading-snug line-clamp-2">{spot.note}</p>
-                                </div>
+                return (
+                    <div className="px-6 pb-8 pt-0">
+                        <div className="grid grid-cols-2 gap-4">
+                            {sortedSpots.map((spot) => {
+                                const theme = REGION_COLORS[spot.region] || COLORS.main;
+                                return (
+                                    <div key={spot.id} className="compact-card glass-card rounded-[24px] p-4 flex flex-col relative cursor-pointer hover:bg-white/60 transition-colors shadow-sm">
+                                        
+                                        <div className="flex justify-between items-start mb-3">
+                                            <div 
+                                                className="w-10 h-10 rounded-xl flex items-center justify-center text-lg border"
+                                                style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}
+                                            >
+                                                <i className={`fa-solid fa-${spot.icon}`}></i>
+                                            </div>
+                                            <div className="flex flex-col items-end gap-1.5">
+                                                <span 
+                                                    className="text-[11px] px-2 py-1 rounded-lg border font-bold flex items-center gap-1.5"
+                                                    style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}
+                                                >
+                                                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.text }}></div>
+                                                    {spot.region}
+                                                </span>
+                                            </div>
+                                        </div>
 
-                                <div className="flex flex-wrap gap-1 mt-auto pt-2">
-                                    {spot.tags.slice(0, 2).map((tag, idx) => (
-                                        <span key={idx} className="text-[9px] bg-white text-stone-500 border border-stone-200 px-1.5 py-0.5 rounded-sm truncate max-w-full shadow-sm">
-                                            #{tag}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                                        <div className="flex-1 mt-1">
+                                            <h3 className="font-bold text-slate-800 text-[15px] leading-tight mb-1.5">{spot.name}</h3>
+                                            <p className="text-[13px] text-slate-600 font-medium leading-snug line-clamp-2">{spot.note}</p>
+                                        </div>
+
+                                        <div className="flex flex-wrap items-center justify-between gap-1.5 mt-3 pt-3 border-t border-black/5">
+                                            <div className="flex gap-1.5">
+                                                {spot.tags.slice(0, 1).map((tag, idx) => (
+                                                    <span key={idx} className="text-[11px] font-bold text-slate-600">
+                                                        #{tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                            <span className="text-[10px] font-bold text-slate-500 bg-black/5 px-2 py-0.5 rounded-md">
+                                                {spot.day}
+                                            </span>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
-            );
+                );
+            };
 
             return (
                 <div className="w-full min-h-screen flex justify-center bg-transparent">
-                    <div className="w-full max-w-md bg-white/20 shadow-[0_0_40px_rgba(0,0,0,0.05)] relative flex flex-col min-h-screen">
+                    <div className="w-full max-w-lg relative flex flex-col min-h-screen">
                         
-                        <header className="pt-10 pb-6 px-6 flex justify-between items-end">
+                        <header className="pt-14 pb-4 px-6 flex justify-between items-end">
                             <div>
-                                <h1 className="text-2xl font-black text-stone-800 tracking-tight">Kansai Trip</h1>
-                                <p className="text-[11px] font-bold text-stone-500 tracking-wider mt-0.5">02/16 - 02/24 · 8 Days Art Tour</p>
-                            </div>
-                            <div className="w-10 h-10 bg-white/60 rounded-full flex items-center justify-center border border-white shadow-sm">
-                                <i className="fa-regular fa-user text-stone-600"></i>
+                                <h1 className="text-4xl font-black text-slate-800 tracking-tight mb-1 drop-shadow-sm">Kansai Trip</h1>
+                                <p className="text-sm font-bold tracking-wider mt-1 drop-shadow-sm" style={{ color: COLORS.main.text }}>02/16 - 02/24 · 8 Days</p>
                             </div>
                         </header>
 
-                        <main className="flex-1 w-full pb-24">
+                        <main className="flex-1 w-full pb-28">
                             {activeTab === 'flights' && renderFlights()}
-                            {activeTab === 'accommodations' && renderAccommodations()}
                             {activeTab === 'itinerary' && renderItinerary()}
+                            {activeTab === 'accommodations' && renderAccommodations()}
                             {activeTab === 'saved' && renderSavedSpots()}
                         </main>
 
-                        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md glass-nav px-4 py-3 flex justify-around items-center z-50 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-                            <button onClick={() => setActiveTab('flights')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'flights' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
-                                <i className="fa-solid fa-plane text-xl"></i>
-                                <span className="text-[10px] font-bold">航班</span>
+                        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-lg glass-nav px-2 py-2 flex justify-around items-center z-50 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
+                            <button onClick={() => setActiveTab('flights')} className={`flex flex-col items-center gap-1 flex-1 transition-all ${activeTab === 'flights' ? 'transform -translate-y-0.5' : 'text-slate-500 hover:text-slate-600'}`} style={activeTab === 'flights' ? { color: COLORS.main.text } : {}}>
+                                <i className="fa-solid fa-plane text-[22px]"></i>
+                                <span className="text-[11px] font-bold">航班</span>
                             </button>
-                            <button onClick={() => setActiveTab('accommodations')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'accommodations' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
-                                <i className="fa-solid fa-bed text-xl"></i>
-                                <span className="text-[10px] font-bold">住宿</span>
+                            <button onClick={() => setActiveTab('itinerary')} className={`flex flex-col items-center gap-1 flex-1 transition-all ${activeTab === 'itinerary' ? 'transform -translate-y-0.5' : 'text-slate-500 hover:text-slate-600'}`} style={activeTab === 'itinerary' ? { color: COLORS.main.text } : {}}>
+                                <i className="fa-solid fa-map-location-dot text-[22px]"></i>
+                                <span className="text-[11px] font-bold">行程</span>
                             </button>
-                            <button onClick={() => setActiveTab('itinerary')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'itinerary' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
-                                <i className="fa-solid fa-map-location-dot text-xl"></i>
-                                <span className="text-[10px] font-bold">行程</span>
+                            <button onClick={() => setActiveTab('accommodations')} className={`flex flex-col items-center gap-1 flex-1 transition-all ${activeTab === 'accommodations' ? 'transform -translate-y-0.5' : 'text-slate-500 hover:text-slate-600'}`} style={activeTab === 'accommodations' ? { color: COLORS.main.text } : {}}>
+                                <i className="fa-solid fa-bed text-[22px]"></i>
+                                <span className="text-[11px] font-bold">住宿</span>
                             </button>
-                            <button onClick={() => setActiveTab('saved')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'saved' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
-                                <i className="fa-solid fa-heart text-xl"></i>
-                                <span className="text-[10px] font-bold">收藏</span>
+                            <button onClick={() => setActiveTab('saved')} className={`flex flex-col items-center gap-1 flex-1 transition-all ${activeTab === 'saved' ? 'transform -translate-y-0.5' : 'text-slate-500 hover:text-slate-600'}`} style={activeTab === 'saved' ? { color: COLORS.main.text } : {}}>
+                                <i className="fa-solid fa-heart text-[22px]"></i>
+                                <span className="text-[11px] font-bold">收藏</span>
                             </button>
                         </nav>
                     </div>
