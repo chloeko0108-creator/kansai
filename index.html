@@ -47,13 +47,7 @@
             scrollbar-width: none;
         }
         .compact-card:active {
-            transform: scale(0.96);
-        }
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;  
-            overflow: hidden;
+            transform: scale(0.98);
         }
     </style>
 </head>
@@ -105,7 +99,7 @@
                 steps: [
                     { time: "10:00", title: "兵庫縣立美術館", type: "activity", icon: "palette", detail: "安藤忠雄操刀設計，欣賞極簡清水模建築與海景，與巨大「青蘋果」合影" },
                     { time: "12:30", title: "舊居留地午餐", type: "food", icon: "utensils", detail: "感受歐風歷史建築群與質感咖啡廳" },
-                    { time: "14:30", title: "榮町通散策 (文具與選物)", type: "shop", icon: "pen-nib", detail: "尋寶：隱藏在舊大樓裡的獨立文具店、藝術質感小物與家飾" },
+                    { time: "14:30", title: "榮町通散策", type: "shop", icon: "pen-nib", detail: "尋寶：隱藏在舊大樓裡的獨立文具店、藝術質感小物與家飾" },
                     { time: "18:00", title: "摩耶山掬星台", type: "activity", icon: "star", detail: "特別景點：日本三大夜景，極度浪漫" }
                 ]
             },
@@ -131,8 +125,8 @@
                 day: 5, date: "02/20(五)", title: "河畔設計與質感生活", weather: "晴朗 11°C", weatherIcon: "sun",
                 steps: [
                     { time: "10:00", title: "中之島散步", type: "activity", icon: "water", detail: "美術館、童書森林與紅磚公會堂，寫意早晨" },
-                    { time: "13:30", title: "南堀江 (山系與設計選物)", type: "shop", icon: "tent", detail: "逛街：匯集 Patagonia 等戶外山系服飾、潮流運動配件與設計家品" },
-                    { time: "15:30", title: "梅田商圈 (大型文具與運動)", type: "shop", icon: "bag-shopping", detail: "集中採購：前往大型店舖 (如 LOFT/大型體育店) 尋找豐富的美術用品與運動裝備" },
+                    { time: "13:30", title: "南堀江", type: "shop", icon: "tent", detail: "逛街：匯集 Patagonia 等戶外山系服飾、潮流運動配件與設計家品" },
+                    { time: "15:30", title: "梅田商圈", type: "shop", icon: "bag-shopping", detail: "集中採購：前往大型店舖 (如 LOFT/大型體育店) 尋找豐富的美術用品與運動裝備" },
                     { time: "18:00", title: "梅田藍天大廈", type: "activity", icon: "sun", detail: "空中庭園展望台看夕陽漸層至夜景" }
                 ]
             },
@@ -173,15 +167,11 @@
             }
         ];
 
-        // 將新增的 4 個景點改為「待排程」並置頂
         const SAVED_SPOTS = [
-            // 待排程區塊
             { id: 11, name: "相樂園會館 The Sorakuen", category: "Food", icon: "seedling", region: "神戶", tags: ["現代玻璃", "百年園林"], note: "六千坪日式庭園內的極簡玻璃法日餐廳", day: "待排程" },
             { id: 12, name: "相生芳 Aioifuku", category: "Food", icon: "house-chimney", region: "大阪", tags: ["傳統名門", "懷石料理"], note: "隱身水都市區的百年料亭，展現豪門靜謐", day: "待排程" },
             { id: 13, name: "菊水樓 Kikusuiro", category: "Food", icon: "leaf", region: "奈良", tags: ["歷史建築", "懷石料理"], note: "接待皇室之名門料亭，挑高落地窗直面綠意", day: "待排程" },
             { id: 14, name: "Hotel de Yoshino", category: "Food", icon: "wine-glass", region: "和歌山", tags: ["古城景觀", "頂級法餐"], note: "平視和歌山城天守閣，傳奇主廚坐鎮", day: "待排程" },
-            
-            // 已排程區塊
             { id: 1, name: "榮町通 Sakaemachi", category: "Shop", icon: "pen-nib", region: "神戶", tags: ["文具", "選物"], note: "隱藏舊大樓的特色小店", day: "Day 2" },
             { id: 2, name: "TeamLab Botanical Garden", category: "Sight", icon: "lightbulb", region: "大阪", tags: ["夜間光影", "浪漫"], note: "植物園內的沉浸式夢幻藝術", day: "Day 4" },
             { id: 3, name: "南堀江 Orange Street", category: "Shop", icon: "tent", region: "大阪", tags: ["山系服飾", "家品"], note: "網羅戶外品牌與質感傢俱", day: "Day 5" },
@@ -195,7 +185,8 @@
         ];
 
         const App = () => {
-            const [activeTab, setActiveTab] = React.useState('saved'); 
+            // 導覽列順序：flights -> itinerary -> accommodations -> saved，預設首頁為航班
+            const [activeTab, setActiveTab] = React.useState('flights'); 
             const [activeDay, setActiveDay] = React.useState(1);
 
             const getRegionColor = (region) => {
@@ -209,76 +200,76 @@
             };
 
             const FlightCard = ({ data }) => (
-                <div className="glass-card rounded-2xl p-5 relative overflow-hidden mb-4">
-                    <div className="flex justify-between items-center border-b border-white/50 pb-3 mb-4">
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-stone-800 text-white flex items-center justify-center">
-                                <i className={`fa-solid ${data.title === "去程航班" ? "fa-plane-departure" : "fa-plane-arrival"} text-sm`}></i>
+                <div className="glass-card rounded-3xl p-6 relative overflow-hidden mb-6">
+                    <div className="flex justify-between items-center border-b border-white/50 pb-4 mb-5">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-stone-800 text-white flex items-center justify-center">
+                                <i className={`fa-solid ${data.title === "去程航班" ? "fa-plane-departure" : "fa-plane-arrival"} text-lg`}></i>
                             </div>
-                            <h3 className="font-bold text-stone-800">{data.title}</h3>
+                            <h3 className="font-bold text-stone-800 text-xl">{data.title}</h3>
                         </div>
-                        <span className="text-xs font-bold text-stone-500 bg-white/60 px-2 py-1 rounded-md">{data.date}</span>
+                        <span className="text-sm font-bold text-stone-500 bg-white/60 px-3 py-1.5 rounded-lg">{data.date}</span>
                     </div>
 
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="text-center">
-                            <p className="text-3xl font-black text-stone-800">{data.dep.time}</p>
-                            <p className="text-sm font-bold text-stone-600 mt-1">{data.dep.port}</p>
-                            <p className="text-[10px] text-stone-500 mt-0.5">{data.dep.city} ({data.dep.term})</p>
+                    <div className="flex justify-between items-center mb-2">
+                        <div className="text-center w-24">
+                            <p className="text-4xl font-black text-stone-800">{data.dep.time}</p>
+                            <p className="text-base font-bold text-stone-600 mt-2">{data.dep.port}</p>
+                            <p className="text-sm text-stone-500 mt-1">{data.dep.city} ({data.dep.term})</p>
                         </div>
                         
                         <div className="flex-1 px-4 flex flex-col items-center">
-                            <p className="text-[10px] text-stone-400 mb-1">{data.duration}</p>
+                            <p className="text-sm text-stone-500 font-medium mb-1.5">{data.duration}</p>
                             <div className="w-full relative flex items-center justify-center">
                                 <div className="h-[2px] bg-stone-300 w-full absolute top-1/2 -translate-y-1/2"></div>
-                                <i className="fa-solid fa-plane text-stone-400 relative z-10 bg-transparent px-1 transform rotate-0"></i>
+                                <i className="fa-solid fa-plane text-stone-400 text-lg relative z-10 bg-transparent px-2 transform rotate-0"></i>
                             </div>
-                            <p className="text-[10px] font-bold text-indigo-600 mt-1">{data.airline} {data.flightNo}</p>
+                            <p className="text-sm font-bold text-indigo-600 mt-2">{data.airline} {data.flightNo}</p>
                         </div>
 
-                        <div className="text-center">
-                            <p className="text-3xl font-black text-stone-800">{data.arr.time}</p>
-                            <p className="text-sm font-bold text-stone-600 mt-1">{data.arr.port}</p>
-                            <p className="text-[10px] text-stone-500 mt-0.5">{data.arr.city} ({data.arr.term})</p>
+                        <div className="text-center w-24">
+                            <p className="text-4xl font-black text-stone-800">{data.arr.time}</p>
+                            <p className="text-base font-bold text-stone-600 mt-2">{data.arr.port}</p>
+                            <p className="text-sm text-stone-500 mt-1">{data.arr.city} ({data.arr.term})</p>
                         </div>
                     </div>
                 </div>
             );
 
             const BaggageCard = () => (
-                <div className="glass-card rounded-2xl p-4 relative overflow-hidden mt-2 mb-4">
-                    <div className="flex items-center justify-between mb-4 px-1">
-                        <div className="flex items-center gap-2">
-                            <i className="fa-solid fa-suitcase-rolling text-stone-700"></i>
-                            <h3 className="font-bold text-stone-800 text-sm">行李限額</h3>
+                <div className="glass-card rounded-3xl p-5 relative overflow-hidden mt-2 mb-6">
+                    <div className="flex items-center justify-between mb-5 px-2">
+                        <div className="flex items-center gap-2.5">
+                            <i className="fa-solid fa-suitcase-rolling text-xl text-stone-700"></i>
+                            <h3 className="font-bold text-stone-800 text-lg">行李限額</h3>
                         </div>
-                        <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100">樂桃航空</span>
+                        <span className="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1.5 rounded-lg border border-indigo-100">樂桃航空</span>
                     </div>
 
-                    <div className="flex gap-3">
-                        <div className="flex-1 bg-white/60 rounded-xl p-3 border border-white flex flex-col items-center">
-                            <i className="fa-solid fa-bag-shopping text-2xl text-stone-500 mb-2 mt-1"></i>
-                            <span className="font-bold text-stone-800 text-[13px] mb-2">手提行李</span>
+                    <div className="flex gap-4">
+                        <div className="flex-1 bg-white/60 rounded-2xl p-4 border border-white flex flex-col items-center">
+                            <i className="fa-solid fa-bag-shopping text-3xl text-stone-500 mb-3 mt-1"></i>
+                            <span className="font-bold text-stone-800 text-base mb-3">手提行李</span>
                             
-                            <div className="w-full space-y-1.5">
-                                <div className="flex items-center justify-center gap-2 text-[11px] text-stone-600 font-bold bg-white py-1.5 rounded-lg shadow-sm border border-stone-100">
+                            <div className="w-full space-y-2">
+                                <div className="flex items-center justify-center gap-2 text-sm text-stone-600 font-bold bg-white py-2 rounded-xl shadow-sm border border-stone-100">
                                     <i className="fa-solid fa-weight-scale text-stone-400"></i> 7 kg
                                 </div>
-                                <div className="flex items-center justify-center gap-2 text-[11px] text-stone-600 font-bold bg-white py-1.5 rounded-lg shadow-sm border border-stone-100">
+                                <div className="flex items-center justify-center gap-2 text-sm text-stone-600 font-bold bg-white py-2 rounded-xl shadow-sm border border-stone-100">
                                     <i className="fa-solid fa-boxes-stacked text-stone-400"></i> 2 件
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex-1 bg-white/60 rounded-xl p-3 border border-white flex flex-col items-center">
-                            <i className="fa-solid fa-suitcase text-2xl text-stone-500 mb-2 mt-1"></i>
-                            <span className="font-bold text-stone-800 text-[13px] mb-2">託運行李</span>
+                        <div className="flex-1 bg-white/60 rounded-2xl p-4 border border-white flex flex-col items-center">
+                            <i className="fa-solid fa-suitcase text-3xl text-stone-500 mb-3 mt-1"></i>
+                            <span className="font-bold text-stone-800 text-base mb-3">託運行李</span>
                             
-                            <div className="w-full space-y-1.5">
-                                <div className="flex items-center justify-center gap-2 text-[11px] text-stone-600 font-bold bg-white py-1.5 rounded-lg shadow-sm border border-stone-100">
+                            <div className="w-full space-y-2">
+                                <div className="flex items-center justify-center gap-2 text-sm text-stone-600 font-bold bg-white py-2 rounded-xl shadow-sm border border-stone-100">
                                     <i className="fa-solid fa-weight-scale text-stone-400"></i> 20 kg
                                 </div>
-                                <div className="flex items-center justify-center gap-2 text-[11px] text-stone-600 font-bold bg-white py-1.5 rounded-lg shadow-sm border border-stone-100">
+                                <div className="flex items-center justify-center gap-2 text-sm text-stone-600 font-bold bg-white py-2 rounded-xl shadow-sm border border-stone-100">
                                     <i className="fa-solid fa-box text-stone-400"></i> 1 件
                                 </div>
                             </div>
@@ -288,8 +279,7 @@
             );
 
             const renderFlights = () => (
-                <div className="px-6 pb-8">
-                    <h2 className="text-xl font-bold text-stone-800 mb-4 pl-1">航班資訊</h2>
+                <div className="px-6 pb-8 pt-2">
                     <FlightCard data={FLIGHTS.outbound} />
                     <FlightCard data={FLIGHTS.inbound} />
                     <BaggageCard />
@@ -297,77 +287,74 @@
             );
 
             const renderAccommodations = () => (
-                <div className="px-6 pb-8 space-y-4">
-                    <h2 className="text-xl font-bold text-stone-800 mb-4 pl-1">住宿安排</h2>
-                    <div className="space-y-3">
-                        {HOTELS.map((hotel, idx) => (
-                            <div key={idx} className="glass-card rounded-2xl p-4 flex gap-4 items-start transition-transform hover:scale-[1.01]">
-                                <div className="w-11 h-11 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500 flex-shrink-0 shadow-sm border border-indigo-100">
-                                    <i className={`fa-solid fa-${hotel.icon || 'bed'} text-lg`}></i>
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-stone-800 leading-tight mb-0.5">{hotel.name}</h4>
-                                    <p className="text-[11px] text-stone-400 mb-2">{hotel.engName}</p>
-                                    <p className="text-xs text-stone-600 mb-2 flex items-center"><i className="fa-solid fa-location-dot mr-1.5 text-stone-400"></i>{hotel.address}</p>
-                                    <div className="flex flex-wrap gap-2 text-[11px] font-medium">
-                                        <span className="bg-white/80 px-2 py-1 rounded text-stone-600 border border-white font-bold">{hotel.checkIn} - {hotel.checkOut} ({hotel.nights}晚)</span>
-                                        <span className="bg-indigo-50 text-indigo-600 px-2 py-1 rounded border border-indigo-100">{hotel.tag}</span>
-                                    </div>
+                <div className="px-6 pb-8 pt-2 space-y-5">
+                    {HOTELS.map((hotel, idx) => (
+                        <div key={idx} className="glass-card rounded-3xl p-5 flex gap-5 items-start transition-transform hover:scale-[1.01]">
+                            <div className="w-14 h-14 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-500 flex-shrink-0 shadow-sm border border-indigo-100">
+                                <i className={`fa-solid fa-${hotel.icon || 'bed'} text-2xl`}></i>
+                            </div>
+                            <div className="flex-1 pt-1">
+                                <h4 className="font-bold text-stone-800 text-xl leading-tight mb-1">{hotel.name}</h4>
+                                <p className="text-sm text-stone-400 mb-3">{hotel.engName}</p>
+                                <p className="text-sm text-stone-600 mb-3 flex items-center font-medium"><i className="fa-solid fa-location-dot mr-2 text-stone-400"></i>{hotel.address}</p>
+                                <div className="flex flex-wrap gap-2 text-sm font-medium">
+                                    <span className="bg-white/80 px-2.5 py-1.5 rounded-lg text-stone-600 border border-white font-bold">{hotel.checkIn} - {hotel.checkOut} ({hotel.nights}晚)</span>
+                                    <span className="bg-indigo-50 text-indigo-600 px-2.5 py-1.5 rounded-lg border border-indigo-100">{hotel.tag}</span>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
                 </div>
             );
 
             const renderItinerary = () => {
                 const dayPlan = ITINERARY.find(d => d.day === activeDay);
                 return (
-                    <div className="flex flex-col">
+                    <div className="flex flex-col pt-2">
                         <div className="w-full overflow-x-auto scrollbar-hide">
-                            <div className="flex gap-2 px-6 pb-4 w-max">
+                            <div className="flex gap-3 px-6 pb-6 w-max">
                                 {ITINERARY.map((item) => (
                                     <button
                                         key={item.day}
                                         onClick={() => setActiveDay(item.day)}
-                                        className={`flex-shrink-0 px-2 py-2 rounded-xl text-sm transition-all duration-300 flex flex-col items-center w-[76px] border ${
+                                        className={`flex-shrink-0 px-3 py-3 rounded-2xl transition-all duration-300 flex flex-col items-center w-[88px] border ${
                                             activeDay === item.day 
                                             ? 'bg-stone-800 text-white border-stone-800 shadow-md transform scale-105' 
                                             : 'bg-white/60 text-stone-500 border-white hover:bg-white/90'
                                         }`}
                                     >
-                                        <span className="text-xs font-bold mb-0.5">Day {item.day}</span>
-                                        <span className="text-[10px] opacity-80">{item.date.split('(')[0]}</span>
+                                        <span className="text-base font-bold mb-1">Day {item.day}</span>
+                                        <span className="text-sm opacity-80">{item.date.split('(')[0]}</span>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
                         <div className="px-6 pb-8">
-                            <div className="glass-card rounded-2xl p-5">
-                                <div className="flex justify-between items-start mb-6">
+                            <div className="glass-card rounded-3xl p-6">
+                                <div className="flex justify-between items-start mb-8">
                                     <div>
-                                        <h2 className="text-xl font-bold text-stone-800 mb-1">{dayPlan.title}</h2>
-                                        <p className="text-stone-500 text-sm font-medium">{dayPlan.date}</p>
+                                        <h2 className="text-3xl font-bold text-stone-800 mb-2">{dayPlan.title}</h2>
+                                        <p className="text-stone-500 text-base font-medium">{dayPlan.date}</p>
                                     </div>
-                                    <div className="text-center bg-white/60 px-3 py-2 rounded-xl shadow-sm border border-white/50">
-                                        <i className={`fa-solid fa-${dayPlan.weatherIcon} text-xl text-stone-700 mb-1`}></i>
-                                        <p className="text-[10px] text-stone-600 font-bold">{dayPlan.weather}</p>
+                                    <div className="text-center bg-white/60 px-4 py-3 rounded-2xl shadow-sm border border-white/50">
+                                        <i className={`fa-solid fa-${dayPlan.weatherIcon} text-2xl text-stone-700 mb-2`}></i>
+                                        <p className="text-sm text-stone-600 font-bold">{dayPlan.weather}</p>
                                     </div>
                                 </div>
 
-                                <div className="relative border-l-2 border-stone-300 ml-4 pl-6 space-y-6 mt-2">
+                                <div className="relative border-l-2 border-stone-300 ml-5 pl-8 space-y-8 mt-4">
                                     {dayPlan.steps.map((step, idx) => (
                                         <div key={idx} className="relative group">
-                                            <div className="absolute -left-[35px] bg-stone-800 text-white w-7 h-7 rounded-full flex items-center justify-center shadow-md border-2 border-white transition-transform group-hover:scale-110">
-                                                <i className={`fa-solid fa-${step.icon} text-xs`}></i>
+                                            <div className="absolute -left-[53px] bg-stone-800 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md border-[3px] border-white transition-transform group-hover:scale-110">
+                                                <i className={`fa-solid fa-${step.icon} text-base`}></i>
                                             </div>
-                                            <div className="bg-white/70 rounded-xl p-3.5 shadow-sm border border-white/60 transition-colors group-hover:bg-white">
-                                                <div className="flex items-center gap-2 mb-1.5">
-                                                    <span className="text-stone-800 font-bold text-sm bg-stone-100 px-1.5 py-0.5 rounded">{step.time}</span>
-                                                    <span className="text-stone-800 font-bold text-sm">{step.title}</span>
+                                            <div className="bg-white/70 rounded-2xl p-5 shadow-sm border border-white/60 transition-colors group-hover:bg-white">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <span className="text-stone-800 font-bold text-base bg-stone-100 px-2 py-1 rounded-lg">{step.time}</span>
+                                                    <span className="text-stone-800 font-bold text-lg">{step.title}</span>
                                                 </div>
-                                                <p className="text-xs text-stone-600 leading-relaxed">{step.detail}</p>
+                                                <p className="text-base text-stone-600 leading-relaxed mt-2">{step.detail}</p>
                                             </div>
                                         </div>
                                     ))}
@@ -379,38 +366,33 @@
             };
 
             const renderSavedSpots = () => (
-                <div className="px-5 pb-8">
-                    <div className="flex justify-between items-end mb-4 pl-1 pr-1">
-                        <h2 className="text-xl font-bold text-stone-800">我的收藏清單</h2>
-                        <span className="text-xs text-stone-500 font-medium pb-0.5"><i className="fa-solid fa-arrow-down-short-wide mr-1"></i>依狀態排序</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
+                <div className="px-6 pb-8 pt-2">
+                    <div className="flex flex-col gap-5">
                         {SAVED_SPOTS.map((spot) => (
-                            <div key={spot.id} className="compact-card glass-card rounded-2xl p-3.5 flex flex-col aspect-square relative cursor-pointer hover:bg-white/90">
+                            <div key={spot.id} className="compact-card glass-card rounded-3xl p-5 flex flex-col relative cursor-pointer hover:bg-white/90">
                                 
-                                <div className="flex justify-between items-start mb-2">
-                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-[15px] border shadow-sm bg-white ${getRegionColor(spot.region)}`}>
+                                <div className="flex justify-between items-start mb-3">
+                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl border shadow-sm bg-white ${getRegionColor(spot.region)}`}>
                                         <i className={`fa-solid fa-${spot.icon}`}></i>
                                     </div>
-                                    <div className="flex flex-col items-end gap-1">
-                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-md border font-bold ${getRegionColor(spot.region)}`}>
+                                    <div className="flex flex-col items-end gap-1.5">
+                                        <span className={`text-sm px-2.5 py-1 rounded-lg border font-bold ${getRegionColor(spot.region)}`}>
                                             <i className="fa-solid fa-location-dot mr-1"></i>{spot.region}
                                         </span>
-                                        {/* 依照是否待排程變換標籤顏色 */}
-                                        <span className={`text-[9px] px-1.5 py-0.5 rounded shadow-sm font-bold ${spot.day === '待排程' ? 'bg-stone-200 text-stone-500 border border-stone-300' : 'bg-stone-800 text-white'}`}>
+                                        <span className={`text-xs px-2.5 py-1 rounded-lg shadow-sm font-bold ${spot.day === '待排程' ? 'bg-stone-200 text-stone-500 border border-stone-300' : 'bg-stone-800 text-white'}`}>
                                             {spot.day}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="flex-1 mt-1 flex flex-col justify-start">
-                                    <h3 className="font-bold text-stone-800 text-sm leading-tight line-clamp-2 mb-1.5">{spot.name}</h3>
-                                    <p className="text-[10px] text-stone-500 leading-snug line-clamp-2">{spot.note}</p>
+                                <div className="flex-1 mt-1">
+                                    <h3 className="font-bold text-stone-800 text-xl leading-tight mb-2">{spot.name}</h3>
+                                    <p className="text-base text-stone-500 leading-relaxed">{spot.note}</p>
                                 </div>
 
-                                <div className="flex flex-wrap gap-1 mt-auto pt-2">
-                                    {spot.tags.slice(0, 2).map((tag, idx) => (
-                                        <span key={idx} className="text-[9px] bg-white text-stone-500 border border-stone-200 px-1.5 py-0.5 rounded-sm truncate max-w-full shadow-sm">
+                                <div className="flex flex-wrap gap-2 mt-4">
+                                    {spot.tags.map((tag, idx) => (
+                                        <span key={idx} className="text-sm font-medium bg-white text-stone-500 border border-stone-200 px-2.5 py-1 rounded-md shadow-sm">
                                             #{tag}
                                         </span>
                                     ))}
@@ -423,41 +405,42 @@
 
             return (
                 <div className="w-full min-h-screen flex justify-center bg-transparent">
-                    <div className="w-full max-w-md bg-white/20 shadow-[0_0_40px_rgba(0,0,0,0.05)] relative flex flex-col min-h-screen">
+                    {/* 這裡把 max-w-md 改成了 max-w-lg 讓卡片與文字有更大的展示空間 */}
+                    <div className="w-full max-w-lg bg-white/20 shadow-[0_0_40px_rgba(0,0,0,0.05)] relative flex flex-col min-h-screen">
                         
-                        <header className="pt-10 pb-6 px-6 flex justify-between items-end">
+                        <header className="pt-12 pb-6 px-6 flex justify-between items-end">
                             <div>
-                                <h1 className="text-2xl font-black text-stone-800 tracking-tight">Kansai Trip</h1>
-                                <p className="text-[11px] font-bold text-stone-500 tracking-wider mt-0.5">02/16 - 02/24 · 8 Days Art Tour</p>
+                                <h1 className="text-4xl font-black text-stone-800 tracking-tight mb-1">Kansai Trip</h1>
+                                <p className="text-sm font-bold text-stone-500 tracking-wider mt-1">02/16 - 02/24 · 8 Days</p>
                             </div>
-                            <div className="w-10 h-10 bg-white/60 rounded-full flex items-center justify-center border border-white shadow-sm">
-                                <i className="fa-regular fa-user text-stone-600"></i>
+                            <div className="w-12 h-12 bg-white/60 rounded-full flex items-center justify-center border border-white shadow-sm">
+                                <i className="fa-regular fa-user text-xl text-stone-600"></i>
                             </div>
                         </header>
 
-                        <main className="flex-1 w-full pb-24">
+                        <main className="flex-1 w-full pb-28">
                             {activeTab === 'flights' && renderFlights()}
-                            {activeTab === 'accommodations' && renderAccommodations()}
                             {activeTab === 'itinerary' && renderItinerary()}
+                            {activeTab === 'accommodations' && renderAccommodations()}
                             {activeTab === 'saved' && renderSavedSpots()}
                         </main>
 
-                        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md glass-nav px-4 py-3 flex justify-around items-center z-50 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-                            <button onClick={() => setActiveTab('saved')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'saved' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
-                                <i className="fa-solid fa-heart text-xl"></i>
-                                <span className="text-[10px] font-bold">收藏</span>
-                            </button>
+                        <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-lg glass-nav px-4 py-4 flex justify-around items-center z-50 pb-[calc(1rem+env(safe-area-inset-bottom))]">
                             <button onClick={() => setActiveTab('flights')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'flights' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
-                                <i className="fa-solid fa-plane text-xl"></i>
-                                <span className="text-[10px] font-bold">航班</span>
-                            </button>
-                            <button onClick={() => setActiveTab('accommodations')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'accommodations' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
-                                <i className="fa-solid fa-bed text-xl"></i>
-                                <span className="text-[10px] font-bold">住宿</span>
+                                <i className="fa-solid fa-plane text-2xl"></i>
+                                <span className="text-sm font-bold">航班</span>
                             </button>
                             <button onClick={() => setActiveTab('itinerary')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'itinerary' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
-                                <i className="fa-solid fa-map-location-dot text-xl"></i>
-                                <span className="text-[10px] font-bold">行程</span>
+                                <i className="fa-solid fa-map-location-dot text-2xl"></i>
+                                <span className="text-sm font-bold">行程</span>
+                            </button>
+                            <button onClick={() => setActiveTab('accommodations')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'accommodations' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
+                                <i className="fa-solid fa-bed text-2xl"></i>
+                                <span className="text-sm font-bold">住宿</span>
+                            </button>
+                            <button onClick={() => setActiveTab('saved')} className={`flex flex-col items-center gap-1.5 flex-1 transition-all ${activeTab === 'saved' ? 'text-stone-800 transform -translate-y-1' : 'text-stone-400 hover:text-stone-600'}`}>
+                                <i className="fa-solid fa-heart text-2xl"></i>
+                                <span className="text-sm font-bold">收藏</span>
                             </button>
                         </nav>
                     </div>
