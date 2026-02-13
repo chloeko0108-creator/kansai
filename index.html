@@ -177,6 +177,7 @@
             inbound: { title: "回程航班", date: "02/23 (一)", airline: "樂桃航空 Peach", flightNo: "MM069", dep: { time: "23:00", port: "KIX", term: "T2", city: "大阪(關西)" }, arr: { time: "02:00", port: "HKG", term: "T1", city: "香港 (+1天)" }, duration: "4h 00m", color: COLORS.pink }
         };
 
+        // ITINERARY 改為全平面結構，混和行程與交通
         const ITINERARY = [
             { 
                 day: 1, date: "02/16(一)", title: "抵達神戶", weather: "晴時多雲 8°C", weatherIcon: "cloud-sun", 
@@ -227,8 +228,8 @@
             { 
                 day: 4, date: "02/19(四)", title: "老屋聚落與光影藝術", weather: "晴時多雲 9°C", weatherIcon: "cloud-sun", 
                 timeline: [
+                    { type: 'hotel', time: '11:00', title: 'Check-out / 離開有馬溫泉', icon: 'bus', detail: '結束溫泉之旅，前往大阪' },
                     { type: 'transport', time: '約 10 分鐘', title: '前往車站/巴士站', icon: 'person-walking', routes: ["步行前往有馬溫泉巴士站或神戶電鐵有馬溫泉站"] },
-                    { type: 'transport', time: '11:00', title: '離開有馬溫泉', icon: 'bus', detail: '結束溫泉之旅，前往大阪' },
                     { type: 'transport', time: '約 75-85 分鐘', title: '有馬溫泉 ➔ 大阪市區', icon: 'bus', isLong: true, routes: ["方案A：搭乘直達高速巴士至大阪梅田/難波 (推薦帶行李者)", "方案B：神戶電鐵轉乘神戶市營地下鐵至三宮，再轉乘 JR/阪急至大阪"] },
                     { type: 'hotel', time: '13:00', title: '東急stay大阪本町酒店 Check-in', icon: 'bed', detail: '寄放行李' },
                     { type: 'transport', time: '15 分鐘', title: '地下鐵御堂筋線', icon: 'train-subway', routes: ["本町站 ➔ 梅田站", "出站步行約 10 分鐘至中崎町"] },
@@ -270,14 +271,14 @@
             { 
                 day: 7, date: "02/22(日)", title: "文化與海之和歌山", weather: "晴時多雲 13°C", weatherIcon: "cloud-sun", 
                 timeline: [
-                    { type: 'hotel', time: '09:30', title: 'Check-out', icon: 'bed', detail: '離開大阪，前往和歌山' },
+                    { type: 'hotel', time: '09:30', title: 'Check-out / 離開大阪', icon: 'bed', detail: 'Check-out，前往和歌山' },
                     { type: 'transport', time: '約 90 分鐘', title: '大阪市區 ➔ 和歌山', icon: 'train', isLong: true, routes: ["住處 ➔ 本町站 (步行 5 分鐘)", "地下鐵御堂筋線：本町站 ➔ 難波站/天王寺站", "南海特急南方號/JR特急黑潮號 ➔ 和歌山站/和歌山市站"] },
                     { type: 'hotel', time: '11:00', title: '飯店寄放行李', icon: 'bed', detail: '和歌山大和ROYNET酒店' },
                     { type: 'transport', time: '30 分鐘', title: '和歌山巴士', icon: 'bus', isLong: true, routes: ["JR 和歌山站搭乘巴士至 濱之宮遊泳場前 (黑潮市場)"] },
                     { type: 'food', time: '12:00', title: '黑潮市場', icon: 'utensils', detail: '品嚐新鮮海鮮丼、觀看黑鮪魚解體秀' },
-                    { type: 'transport', time: '15 分鐘', title: '巴士或計程車', icon: 'taxi', routes: ["搭乘地方巴士至黑江，或直接轉乘計程車較為快速"] },
-                    { type: 'activity', time: '14:30', title: '黑江老街與蒔繪體驗', icon: 'paintbrush', detail: '體驗：漫步傳統漆器老街，並親手體驗「蒔繪」金箔彩繪工藝' },
-                    { type: 'transport', time: '25 分鐘', title: '和歌山巴士', icon: 'bus', routes: ["搭乘巴士返回和歌山市區，於公園前站下車"] },
+                    { type: 'transport', time: '約 120 分鐘', title: '前往高野山', icon: 'car', isLong: true, routes: ["建議包車或租車前往，大眾運輸需經和歌山站轉乘南海電鐵"] },
+                    { type: 'activity', time: '14:30', title: '高野山 奧之院', icon: 'torii-gate', detail: '日本佛教聖地，漫步於千年杉木林參道，感受莊嚴肅穆的氛圍' },
+                    { type: 'transport', time: '約 90 分鐘', title: '返回和歌山市區', icon: 'car', isLong: true, routes: ["下山返回和歌山市區，前往和歌山城"] },
                     { type: 'activity', time: '16:30', title: '和歌山城散步', icon: 'landmark', detail: '夕陽下的名城庭園與天守閣，寫意浪漫' },
                     { type: 'transport', time: '10 分鐘', title: '步行 / 巴士', icon: 'bus', routes: ["前往井出商店"] },
                     { type: 'food', time: '18:30', title: '井出商店', icon: 'utensils', detail: '晚餐：品嚐全日本知名的正宗和歌山拉麵' },
@@ -287,12 +288,17 @@
             { 
                 day: 8, date: "02/23(一)", title: "小鎮風情與踏上歸途", weather: "晴朗 14°C", weatherIcon: "sun", 
                 timeline: [
-                    { type: 'hotel', time: '09:00', title: 'Check-out', icon: 'bed', detail: '', transferToNext: { title: '飯店 ➔ 貴志站', time: '約 40 分鐘', icon: 'train-tram', isLong: true, routes: ["住處 (Daiwa Roynet) ➔ JR 和歌山站", "和歌山電鐵 ➔ 貴志站 (探訪貓咪站長)"] } }, 
-                    { type: 'activity', time: '10:00', title: '和歌山電鐵貴志川線', icon: 'train-tram', detail: '搭乘特色列車探訪超萌「二代玉」貓咪站長', transferToNext: { title: '和歌山巴士', time: '40 分鐘', icon: 'bus', isLong: true, routes: ["返回和歌山站，轉乘巴士前往雜賀崎漁港"] } }, 
-                    { type: 'activity', time: '13:30', title: '雜賀崎漁港', icon: 'camera', detail: '有「日本阿瑪菲」之稱的浪漫復古海岸', transferToNext: { title: '步行', time: '5 分鐘', icon: 'person-walking', routes: ["沿著海岸線前往海景咖啡廳"] } }, 
-                    { type: 'cafe', time: '15:00', title: '海邊絕景咖啡廳', icon: 'mug-hot', detail: '享受旅行最後的看海放空時光', transferToNext: { title: '和歌山 ➔ 臨空城', time: '約 50 分鐘', icon: 'train', isLong: true, routes: ["搭乘巴士返回和歌山市區", "轉乘南海電鐵或 JR 前往臨空城 (Rinku Town)"] } }, 
-                    { type: 'shop', time: '16:30', title: '臨空城 Outlet', icon: 'bag-shopping', detail: '最後血拼：集中掃貨各大運動品牌的跑步、網球鞋與服飾', transferToNext: { title: '鐵路 (機場線)', time: '10 分鐘', icon: 'train', routes: ["臨空城站 ➔ 關西機場站"] } }, 
-                    { type: 'activity', time: '20:30', title: '抵達關西機場', icon: 'plane-departure', detail: '辦理報到、免稅店最後採購物產與伴手禮' }, 
+                    { type: 'hotel', time: '09:00', title: 'Check-out', icon: 'bed', detail: '' },
+                    { type: 'transport', time: '約 40 分鐘', title: '飯店 ➔ 貴志站', icon: 'train-tram', isLong: true, routes: ["住處 (Daiwa Roynet) ➔ JR 和歌山站", "和歌山電鐵 ➔ 貴志站 (探訪貓咪站長)"] },
+                    { type: 'activity', time: '10:00', title: '和歌山電鐵貴志川線', icon: 'train-tram', detail: '搭乘特色列車探訪超萌「二代玉」貓咪站長' },
+                    { type: 'transport', time: '40 分鐘', title: '和歌山巴士', icon: 'bus', isLong: true, routes: ["返回和歌山站，轉乘巴士前往雜賀崎漁港"] },
+                    { type: 'activity', time: '13:30', title: '雜賀崎漁港', icon: 'camera', detail: '有「日本阿瑪菲」之稱的浪漫復古海岸' },
+                    { type: 'transport', time: '5 分鐘', title: '步行', icon: 'person-walking', routes: ["沿著海岸線前往海景咖啡廳"] },
+                    { type: 'cafe', time: '15:00', title: '海邊絕景咖啡廳', icon: 'mug-hot', detail: '享受旅行最後的看海放空時光' },
+                    { type: 'transport', time: '約 50 分鐘', title: '和歌山 ➔ 臨空城', icon: 'train', isLong: true, routes: ["搭乘巴士返回和歌山市區", "轉乘南海電鐵或 JR 前往臨空城 (Rinku Town)"] },
+                    { type: 'shop', time: '16:30', title: '臨空城 Outlet', icon: 'bag-shopping', detail: '最後血拼：集中掃貨各大運動品牌的跑步、網球鞋與服飾' },
+                    { type: 'transport', time: '10 分鐘', title: '鐵路 (機場線)', icon: 'train', routes: ["臨空城站 ➔ 關西機場站"] },
+                    { type: 'activity', time: '20:30', title: '抵達關西機場', icon: 'plane-departure', detail: '辦理報到、免稅店最後採購物產與伴手禮' },
                     { type: 'transport', time: '23:00', title: '搭乘 MM069 航班', icon: 'plane', detail: '帶著滿滿回憶返回，於 02/24 凌晨抵達' }
                 ]
             }
@@ -309,9 +315,11 @@
             { id: 5, name: "若草山行山路線", category: "Experience", icon: "person-hiking", region: "奈良", tags: ["行山"], note: "浪漫草地山坡，與鹿共賞全景", day: "Day 6" },
             { id: 6, name: "中川政七商店", category: "Shop", icon: "gift", region: "奈良", tags: ["家品"], note: "絕美複合空間，生活道具必逛", day: "Day 6" },
             { id: 13, name: "菊水樓 Kikusuiro", category: "Food", icon: "leaf", region: "奈良", tags: ["歷史建築"], note: "接待皇室名門，挑高落地窗直面綠意", day: "待排程" },
+            { id: 15, name: "高野山 奧之院", category: "Experience", icon: "torii-gate", region: "和歌山", tags: ["世界遺產", "朝聖"], note: "日本佛教聖地，漫步於參道杉木林", day: "Day 7" },
             { id: 7, name: "紀州漆器 蒔繪", category: "Experience", icon: "paintbrush", region: "和歌山", tags: ["手作"], note: "體驗優雅的金粉彩繪工藝", day: "Day 7" },
             { id: 8, name: "和歌山城", category: "Sight", icon: "landmark", region: "和歌山", tags: ["歷史"], note: "日本百大名城，夕陽時分散步", day: "Day 7" },
-            { id: 9, name: "雜賀崎漁港", category: "Sight", icon: "camera", region: "和歌山", tags: ["海景"], note: "日本阿瑪菲，依山傍海的漁村", day: "Day 8" }
+            { id: 9, name: "雜賀崎漁港", category: "Sight", icon: "camera", region: "和歌山", tags: ["海景"], note: "日本阿瑪菲，依山傍海的漁村", day: "Day 8" },
+            { id: 14, name: "Hotel de Yoshino", category: "Food", icon: "wine-glass", region: "和歌山", tags: ["頂級法餐"], note: "平視和歌山城天守閣，傳奇主廚坐鎮", day: "待排程" }
         ];
 
         // --- 子元件定義 ---
@@ -414,18 +422,6 @@
                             </div>
                         )}
                     </div>
-                    
-                    {/* 交通轉乘卡片 (遞迴渲染) */}
-                    {item.transferToNext && (
-                         <TimelineItemCard item={{
-                             type: 'transport',
-                             time: item.transferToNext.time,
-                             title: item.transferToNext.title,
-                             icon: item.transferToNext.icon,
-                             isLong: item.transferToNext.isLong,
-                             routes: item.transferToNext.routes
-                         }} theme={theme} />
-                    )}
                 </div>
             )
         }
