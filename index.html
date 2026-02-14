@@ -8,6 +8,8 @@
     <title>Kansai2026</title>
     <meta name="apple-mobile-web-app-title" content="Kansai2026">
     <meta name="application-name" content="Kansai2026">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- React & Babel -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -500,16 +502,34 @@
         const openDirections = (e, title, icon) => {
             e.stopPropagation();
             const parts = title.split('➔').map(s => s.trim());
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+            
             if (parts.length >= 2) {
                 const origin = encodeURIComponent(parts[0]);
                 const dest = encodeURIComponent(parts[1]);
                 let mode = 'transit'; 
                 if (icon === 'person-walking') mode = 'walking';
                 if (icon === 'car') mode = 'driving';
-                window.open(`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=${mode}`, '_blank');
+                
+                if (isIOS) {
+                   window.location.href = `comgooglemaps://?saddr=${origin}&daddr=${dest}&directionsmode=${mode}`;
+                } else if (isAndroid) {
+                    window.location.href = `google.navigation:q=${dest}&mode=${mode === 'walking' ? 'w' : 'd'}`; // Android intent is simpler, or use geo
+                    // Better Android fallback to universal link for directions as intent is specific
+                    window.open(`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=${mode}`, '_blank');
+                } else {
+                    window.open(`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=${mode}`, '_blank');
+                }
             } else {
                  const query = encodeURIComponent(title);
-                 window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+                 if (isIOS) {
+                    window.location.href = `comgooglemaps://?q=${query}`;
+                 } else if (isAndroid) {
+                    window.location.href = `geo:0,0?q=${query}`;
+                 } else {
+                    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+                 }
             }
         };
 
@@ -517,7 +537,16 @@
         const openMap = (e, query) => {
             e.stopPropagation();
             const q = encodeURIComponent(query);
-            window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, '_blank');
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+
+            if (isIOS) {
+                window.location.href = `comgooglemaps://?q=${q}`;
+            } else if (isAndroid) {
+                window.location.href = `geo:0,0?q=${q}`;
+            } else {
+                window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, '_blank');
+            }
         };
 
         // Helper function for Google Web search
@@ -644,7 +673,9 @@
                             <span><i className="fa-regular fa-clock mr-1"></i>{(item.hours || '').split(',')[0]}</span>
                             <span className="text-red-400"><i className="fa-solid fa-ban mr-1"></i>{item.closed}</span>
                         </div>
-                        <div className="flex items-center gap-1"><i className="fa-solid fa-location-dot text-slate-300"></i> {item.address}</div>
+                        <div className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition-colors" onClick={(e) => openMap(e, item.address)}>
+                            <i className="fa-solid fa-location-dot text-slate-300"></i> <span className="underline decoration-dotted">{item.address}</span>
+                        </div>
                     </div>
                 </div>
             );
@@ -747,7 +778,9 @@
                                                 <span><i className="fa-regular fa-clock mr-1 text-slate-300"></i>{spot.hours}</span>
                                                 <span className="text-red-400"><i className="fa-solid fa-ban mr-1"></i>{spot.closed}</span>
                                             </div>
-                                            <div className="flex items-center gap-1"><i className="fa-solid fa-location-dot text-slate-300"></i> {spot.address}</div>
+                                            <div className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition-colors" onClick={(e) => openMap(e, spot.address)}>
+                                                <i className="fa-solid fa-location-dot text-slate-300"></i> <span className="underline decoration-dotted">{spot.address}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
