@@ -620,7 +620,7 @@
                         </div>
                         <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-center mb-1">
-                                <h3 className="font-bold text-slate-800 text-lg truncate pr-2" onClick={(e) => openGoogleSearch(e, item.name)}>{item.name}</h3>
+                                <h3 className="font-bold text-slate-800 text-lg truncate pr-2" onClick={(e) => openMap(e, item.name)}>{item.name}</h3>
                                 <div className="flex items-center gap-1 bg-yellow-50 px-2 py-0.5 rounded-md border border-yellow-200 flex-shrink-0">
                                     <i className="fa-solid fa-star text-yellow-500 text-xs"></i>
                                     <span className="text-xs font-bold text-slate-700">{item.rating}</span>
@@ -640,9 +640,7 @@
                             <span><i className="fa-regular fa-clock mr-1"></i>{(item.hours || '').split(',')[0]}</span>
                             <span className="text-red-400"><i className="fa-solid fa-ban mr-1"></i>{item.closed}</span>
                         </div>
-                        <div className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition-colors" onClick={(e) => openMap(e, item.address)}>
-                            <i className="fa-solid fa-location-dot text-slate-300"></i> <span className="underline decoration-dotted">{item.address}</span>
-                        </div>
+                        <div className="flex items-center gap-1"><i className="fa-solid fa-location-dot text-slate-300"></i> {item.address}</div>
                     </div>
                 </div>
             );
@@ -733,7 +731,7 @@
                                         <i className={`fa-solid fa-${spot.icon}`}></i>
                                     </div>
                                     <div className="flex-1">
-                                        <h4 className="font-bold text-slate-700" onClick={(e) => openGoogleSearch(e, spot.name)}>{spot.name}</h4>
+                                        <h4 className="font-bold text-slate-700" onClick={(e) => openMap(e, spot.name)}>{spot.name}</h4>
                                         <div className="flex items-center gap-2 mt-1 mb-1">
                                             <span className="text-[10px] border px-2 py-0.5 rounded font-bold" style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}>
                                                 {spot.region}
@@ -745,9 +743,7 @@
                                                 <span><i className="fa-regular fa-clock mr-1 text-slate-300"></i>{spot.hours}</span>
                                                 <span className="text-red-400"><i className="fa-solid fa-ban mr-1"></i>{spot.closed}</span>
                                             </div>
-                                            <div className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition-colors" onClick={(e) => openMap(e, spot.address)}>
-                                                <i className="fa-solid fa-location-dot text-slate-300"></i> <span className="underline decoration-dotted">{spot.address}</span>
-                                            </div>
+                                            <div className="flex items-center gap-1"><i className="fa-solid fa-location-dot text-slate-300"></i> {spot.address}</div>
                                         </div>
                                     </div>
                                 </div>
