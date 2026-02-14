@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>柔和莫蘭迪 - 關西8日遊</title>
     
-    <!-- React & Babel (Fixed: Added crossorigin to Babel to prevent 'Script error') -->
+    <!-- React & Babel -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,7 +26,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- CSS 設定 --- */
+        /* 背景設定 */
         .bg-image {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -156,7 +156,6 @@
             { name: "和歌山大和ROYNET酒店", engName: "Daiwa Roynet Hotel Wakayama", address: "和歌山市七番丁 26-1", checkIn: "02/22(日)", checkOut: "02/23(一)", nights: 1, roomType: "標準雙床房 (禁煙)", tag: "和歌山城旁", icon: "landmark", color: COLORS.green }
         ];
 
-        // RESTAURANTS data
         const RESTAURANTS = [
             { id: 10, name: "燃えよ麺助", region: "大阪", rating: 4.5, type: "拉麵", desc: "必吃紀州鴨そば！微甜醬油湯底配上二度燒蔥，香氣逼人。", icon: "bowl-rice", address: "大阪市福島區福島5-12-21", hours: "11:00-15:00, 18:00-21:00", closed: "週二" },
             { id: 11, name: "鶴屋 (Tsuruya)", region: "大阪", rating: 4.4, type: "壽喜燒", desc: "主打國產和牛，一人一鍋形式，自在享用頂級鍋物。", icon: "fire", address: "大阪市中央區日本橋1-5-4", hours: "11:00-23:00", closed: "不定休" },
@@ -183,8 +182,8 @@
             { 
                 day: 1, date: "02/16(一)", title: "神戶到著", weather: "8°C", weatherIcon: "cloud-sun", 
                 timeline: [
-                    { type: 'activity', time: '17:10', title: '抵達關西機場 T2', icon: 'plane', detail: '準備前往神戶市區' },
-                    { type: 'transport', time: '約 70 分鐘', title: '關西機場 ➔ 神戶市區', icon: 'train', isLong: true, routes: [
+                    { type: 'activity', time: '17:10', title: '關西機場 T2', icon: 'plane', detail: '準備前往神戶市區' },
+                    { type: 'transport', time: '約 70 分鐘', title: '關西機場 ➔ 神戶三宮站', icon: 'train', isLong: true, routes: [
                         "【方案 A (高速船 - 推薦)】關西機場 T1 (12號櫃檯) / T2 (接駁車) → 高速船碼頭",
                         "搭乘：Bay Shuttle 高速船 (往神戶機場)",
                         "下車：神戶機場棧橋 → 步行至神戶機場站",
@@ -196,21 +195,21 @@
                         "搭乘：JR 神戶線 新快速 (往姬路/西明石)",
                         "下車：三宮站 (東口出口)"
                     ] },
-                    { type: 'hotel', time: '19:30', title: '飯店 Check-in', icon: 'bed', detail: '神戶美利堅公園東方大酒店' },
-                    { type: 'transport', time: '約 15 分鐘', title: '三宮 ➔ 飯店', icon: 'bus', routes: [
+                    { type: 'hotel', time: '19:30', title: '神戶美利堅公園東方大酒店', icon: 'bed', detail: 'Check-in' },
+                    { type: 'transport', time: '約 15 分鐘', title: '神戶三宮站 ➔ 神戶美利堅公園東方大酒店', icon: 'bus', routes: [
                         "【方案 A】三宮站 Mint Kobe 1樓巴士總站 (8號月台)",
                         "搭乘：飯店免費接駁巴士 (週末假日班次較多)",
                         "下車：神戶美利堅公園東方大酒店",
                         "【方案 B】步行 / 計程車",
                         "路線：沿 Flower Road 往南直行至港邊 (約 20 分)",
                     ]},
-                    { type: 'activity', time: '20:30', title: '神戶港灣夜跑', icon: 'person-running', detail: '體驗：沿著美利堅公園至臨海樂園，享受 5-10km 的浪漫海風夜跑' }
+                    { type: 'activity', time: '20:30', title: '美利堅公園', icon: 'person-running', detail: '活動：神戶港灣夜跑 (美利堅公園至臨海樂園，享受 5-10km 的浪漫海風夜跑)' }
                 ]
             },
             { 
                 day: 2, date: "02/17(二)", title: "神戶文創＆浪漫夜景", weather: "10°C", weatherIcon: "sun",
                 timeline: [
-                    { type: 'transport', time: '約 35 分鐘', title: '飯店 ➔ 兵庫縣立美術館', icon: 'train-tram', routes: [
+                    { type: 'transport', time: '約 35 分鐘', title: '神戶美利堅公園東方大酒店 ➔ 兵庫縣立美術館', icon: 'train-tram', routes: [
                         "上車：飯店接駁巴士 → 三宮站",
                         "進站：阪神 三宮站",
                         "搭乘：阪神本線 普通 (往大阪梅田)",
@@ -218,16 +217,16 @@
                         "出口：南口 → 步行約 10 分鐘"
                     ] },
                     { type: 'activity', time: '10:00', title: '兵庫縣立美術館', icon: 'palette', detail: '安藤忠雄操刀設計，欣賞極簡清水模建築與海景，與巨大「青蘋果」合影' },
-                    { type: 'transport', time: '15 分鐘', title: '美術館 ➔ 舊居留地', icon: 'train-tram', routes: [
+                    { type: 'transport', time: '15 分鐘', title: '兵庫縣立美術館 ➔ 神戶舊居留地', icon: 'train-tram', routes: [
                         "上車：岩屋站",
                         "搭乘：阪神本線 (往神戶三宮/元町)",
                         "下車：元町站 (Motomachi)",
                         "出口：東改札口 → 步行至舊居留地"
                     ] },
-                    { type: 'food', time: '12:30', title: '舊居留地午餐', icon: 'utensils', detail: '感受歐風歷史建築群與質感咖啡廳' },
-                    { type: 'transport', time: '5 分鐘', title: '步行', icon: 'person-walking', routes: ["舊居留地 → 步行約 5-10 分鐘 → 榮町通"] },
-                    { type: 'shop', time: '14:30', title: '榮町通散策', icon: 'pen-nib', detail: '尋寶：隱藏在舊大樓裡的獨立文具店、藝術質感小物與家飾' },
-                    { type: 'transport', time: '15 分鐘', title: '步行前往晚餐', icon: 'person-walking', routes: ["榮町通 → 步行至三宮站北側 (北長狹通/生田路區域)"] },
+                    { type: 'food', time: '12:30', title: '神戶舊居留地', icon: 'utensils', detail: '午餐：感受歐風歷史建築群與質感咖啡廳' },
+                    { type: 'transport', time: '5 分鐘', title: '神戶舊居留地 ➔ 神戸 栄町通', icon: 'person-walking', routes: ["舊居留地 → 步行約 5-10 分鐘 → 榮町通"] },
+                    { type: 'shop', time: '14:30', title: '神戸 栄町通', icon: 'pen-nib', detail: '逛街：尋寶隱藏在舊大樓裡的獨立文具店、藝術質感小物與家飾' },
+                    { type: 'transport', time: '15 分鐘', title: '神戸 栄町通 ➔ 神戶牛排 Ishida. 本店', icon: 'person-walking', routes: ["榮町通 → 步行至三宮站北側 (北長狹通/生田路區域)"] },
                     { 
                         type: 'food', time: '17:00', title: '神戶牛排 Ishida. 本店', icon: 'fire-burner', 
                         reservation: {
@@ -238,14 +237,14 @@
                             email: "chloeko0108@gmail.com"
                         }
                     },
-                    { type: 'transport', time: '約 40 分鐘', title: '三宮 ➔ 摩耶山掬星台', icon: 'bus', isLong: true, routes: [
+                    { type: 'transport', time: '約 40 分鐘', title: '神戶三宮站 ➔ 摩耶山 掬星台', icon: 'bus', isLong: true, routes: [
                         "上車：三宮站前巴士站 (Mint Kobe 下方)",
                         "搭乘：神戶市巴士 18 系統 (往摩耶纜車下)",
                         "下車：摩耶纜車下站",
                         "轉乘：摩耶 Viewline (纜車 + 索道) → 星之站"
                     ] },
-                    { type: 'activity', time: '19:00', title: '摩耶山掬星台', icon: 'star', detail: '特別景點：日本三大夜景，極度浪漫' },
-                    { type: 'transport', time: '45 分鐘', title: '返回飯店', icon: 'bus', isLong: true, routes: [
+                    { type: 'activity', time: '19:00', title: '掬星台', icon: 'star', detail: '特別景點：日本三大夜景，極度浪漫' },
+                    { type: 'transport', time: '45 分鐘', title: '掬星台 ➔ 神戶美利堅公園東方大酒店', icon: 'bus', isLong: true, routes: [
                         "上車：星之站 (索道 + 纜車) 下山",
                         "轉乘：神戶市巴士 18 系統 (往三宮)",
                         "下車：三宮站",
@@ -256,8 +255,8 @@
             { 
                 day: 3, date: "02/18(三)", title: "遊月山莊溫泉夜", weather: "7°C", weatherIcon: "cloud", 
                 timeline: [
-                    { type: 'hotel', time: '10:00', title: 'Check-out', icon: 'bed', detail: '準備前往有馬溫泉' },
-                    { type: 'transport', time: '約 60 分鐘', title: '三宮 ➔ 有馬溫泉', icon: 'train-subway', isLong: true, routes: [
+                    { type: 'hotel', time: '10:00', title: '神戶美利堅公園東方大酒店', icon: 'bed', detail: 'Check-out' },
+                    { type: 'transport', time: '約 60 分鐘', title: '神戶三宮站 ➔ 有馬溫泉站', icon: 'train-subway', isLong: true, routes: [
                         "【方案 A (巴士)】三宮巴士總站 (Mint Kobe 1F)",
                         "搭乘：阪急/JR 高速巴士 (往有馬溫泉)",
                         "下車：有馬溫泉站",
@@ -267,29 +266,29 @@
                         "轉乘：有馬口站 → 有馬溫泉線",
                         "下車：有馬溫泉站"
                     ] },
-                    { type: 'transport', time: '11:30', title: '抵達有馬溫泉', icon: 'map', detail: '溫泉街老舖巡禮、品嚐炭酸煎餅' },
-                    { type: 'transport', time: '5 分鐘', title: '步行 / 旅館接駁', icon: 'van-shuttle', routes: ["抵達巴士站/車站後，聯繫旅館接駁車或步行約 10 分鐘"] },
-                    { type: 'hotel', time: '15:00', title: '月光園遊月山莊 Check-in', icon: 'bed', detail: '享受房內專屬露天風呂，寫意放鬆' },
-                    { type: 'food', time: '18:00', title: '懷石料理晚餐', icon: 'utensils', detail: '旅館內享用傳統職人料理' }
+                    { type: 'transport', time: '11:30', title: '有馬溫泉', icon: 'map', detail: '行程：溫泉街老舖巡禮、品嚐炭酸煎餅' },
+                    { type: 'transport', time: '5 分鐘', title: '有馬溫泉站 ➔ 月光園遊月山莊', icon: 'van-shuttle', routes: ["抵達巴士站/車站後，聯繫旅館接駁車或步行約 10 分鐘"] },
+                    { type: 'hotel', time: '15:00', title: '月光園遊月山莊', icon: 'bed', detail: 'Check-in: 享受房內專屬露天風呂，寫意放鬆' },
+                    { type: 'food', time: '18:00', title: '月光園遊月山莊', icon: 'utensils', detail: '晚餐：旅館內享用傳統職人料理' }
                 ]
             },
             { 
                 day: 4, date: "02/19(四)", title: "大阪中崎町＆天王寺", weather: "9°C", weatherIcon: "cloud-sun", 
                 timeline: [
-                    { type: 'hotel', time: '11:00', title: 'Check-out / 離開有馬溫泉', icon: 'bus', detail: '結束溫泉之旅，前往大阪' },
-                    { type: 'transport', time: '約 60 分鐘', title: '有馬溫泉 ➔ 大阪 (梅田)', icon: 'bus', isLong: true, routes: [
+                    { type: 'hotel', time: '11:00', title: '月光園遊月山莊', icon: 'bus', detail: 'Check-out / 離開有馬溫泉，結束溫泉之旅，前往大阪' },
+                    { type: 'transport', time: '約 60 分鐘', title: '有馬溫泉站 ➔ 大阪梅田站', icon: 'bus', isLong: true, routes: [
                         "上車：有馬溫泉巴士站 (太閣橋附近)",
                         "搭乘：阪急高速巴士 (往大阪梅田)",
                         "下車：阪急三番街巴士總站 (大阪梅田)"
                     ] },
-                    { type: 'transport', time: '約 15 分鐘', title: '梅田 ➔ 本町 (放行李)', icon: 'train-subway', routes: [
+                    { type: 'transport', time: '約 15 分鐘', title: '大阪梅田站 ➔ 本町站 (放行李)', icon: 'train-subway', routes: [
                         "進站：梅田站 (M16)",
                         "搭乘：大阪地下鐵 御堂筋線 (往天王寺/中百舌鳥)",
                         "下車：本町站 (M18)",
-                        "出口：13號或11號出口 (最接近飯店)"
+                        "出口：13號或11號出口 (最接近東急 Stay)"
                     ] },
                     { type: 'hotel', time: '13:00', title: '東急stay大阪本町酒店', icon: 'bed', detail: '寄放行李' },
-                    { type: 'transport', time: '15 分鐘', title: '本町 ➔ 中崎町', icon: 'train-subway', routes: [
+                    { type: 'transport', time: '15 分鐘', title: '本町站 ➔ 中崎町站', icon: 'train-subway', routes: [
                         "進站：本町站 (M18)",
                         "搭乘：大阪地下鐵 御堂筋線 (往新大阪/千里中央)",
                         "下車：梅田站 (M16)",
@@ -298,16 +297,16 @@
                         "下車：中崎町站 (T19)",
                         "出口：2號或4號出口"
                     ] },
-                    { type: 'activity', time: '14:00', title: '中崎町散策與調香體驗', icon: 'spa', detail: '體驗：探訪復古巷弄，在香氛工坊調製專屬兩人的紀念香水或線香' },
-                    { type: 'transport', time: '20 分鐘', title: '中崎町 ➔ 天王寺', icon: 'train-subway', isLong: true, routes: [
+                    { type: 'activity', time: '14:00', title: '中崎町', icon: 'spa', detail: '體驗：散策與調香體驗 (探訪復古巷弄，在香氛工坊調製專屬兩人的紀念香水或線香)' },
+                    { type: 'transport', time: '20 分鐘', title: '中崎町站 ➔ 天王寺站', icon: 'train-subway', isLong: true, routes: [
                         "進站：中崎町站 (T19)",
                         "搭乘：大阪地下鐵 谷町線 (往天王寺/八尾南)",
                         "下車：天王寺站 (T27)",
                         "出口：地下連通道直結 Q's Mall"
                     ] },
                     { type: 'shop', time: '16:00', title: 'Sports Depo 天王寺店', icon: 'shirt', detail: '位於 Q\'s Mall，商品齊全的運動用品專賣店' },
-                    { type: 'activity', time: '18:30', title: '阿倍野 HARUKAS 300 展望台', icon: 'building', detail: '特別景點：步行過天橋至近鐵百貨搭乘電梯，俯瞰大阪絕美夜景' },
-                    { type: 'transport', time: '15 分鐘', title: '返回飯店', icon: 'train-subway', isLong: true, routes: [
+                    { type: 'activity', time: '18:30', title: 'Harukas 300', icon: 'building', detail: '特別景點：阿倍野 HARUKAS 300 展望台，步行過天橋至近鐵百貨搭乘電梯，俯瞰大阪絕美夜景' },
+                    { type: 'transport', time: '15 分鐘', title: '天王寺站 ➔ 東急stay大阪本町酒店', icon: 'train-subway', isLong: true, routes: [
                         "進站：天王寺站 (M23)",
                         "搭乘：大阪地下鐵 御堂筋線 (往新大阪/千里中央)",
                         "下車：本町站 (M18)",
@@ -318,31 +317,31 @@
             { 
                 day: 5, date: "02/20(五)", title: "大阪中之島閒遊", weather: "11°C", weatherIcon: "sun",
                 timeline: [
-                    { type: 'transport', time: '約 15 分鐘', title: '飯店 ➔ 中之島', icon: 'train-subway', routes: [
+                    { type: 'transport', time: '約 15 分鐘', title: '東急stay大阪本町酒店 ➔ 肥後橋站 (中之島)', icon: 'train-subway', routes: [
                         "進站：本町站 (Y13)",
                         "搭乘：大阪地下鐵 四橋線 (往西梅田)",
                         "下車：肥後橋站 (Y12)",
                         "出口：3號出口 → 步行至中之島"
                     ] }, 
-                    { type: 'activity', time: '10:00', title: '中之島散步', icon: 'water', detail: '美術館、童書森林與紅磚公會堂，寫意早晨' },
-                    { type: 'transport', time: '15 分鐘', title: '肥後橋 ➔ 四橋 (南堀江)', icon: 'train-subway', routes: [
+                    { type: 'activity', time: '10:00', title: '中之島公園', icon: 'water', detail: '活動：散步 (美術館、童書森林與紅磚公會堂，寫意早晨)' },
+                    { type: 'transport', time: '15 分鐘', title: '肥後橋站 ➔ 四橋站 (南堀江)', icon: 'train-subway', routes: [
                         "進站：肥後橋站 (Y12)",
                         "搭乘：大阪地下鐵 四橋線 (往住之江公園)",
                         "下車：四橋站 (Y14)",
                         "出口：6號出口 → 步行至 Orange Street"
                     ] },
-                    { type: 'shop', time: '13:30', title: '南堀江 Orange Street', icon: 'tent', detail: '逛街：匯集 Patagonia 等戶外山系服飾、潮流運動配件與設計家品' },
-                    { type: 'transport', time: '15 分鐘', title: '四橋 ➔ 西梅田', icon: 'train-subway', routes: [
+                    { type: 'shop', time: '13:30', title: 'Orange Street', icon: 'tent', detail: '逛街：南堀江，匯集 Patagonia 等戶外山系服飾、潮流運動配件與設計家品' },
+                    { type: 'transport', time: '15 分鐘', title: '四橋站 ➔ 西梅田站', icon: 'train-subway', routes: [
                         "進站：四橋站 (Y14)",
                         "搭乘：大阪地下鐵 四橋線 (往西梅田)",
                         "下車：西梅田站 (Y11)",
                         "出口：往茶屋町方向 (經地下街步行約 10-15 分)"
                     ] },
-                    { type: 'shop', time: '15:30', title: '梅田商圈 (LOFT & SteP)', icon: 'bag-shopping', detail: '集中採購：LOFT美術用品、SteP SPORTS 專業跑鞋' },
-                    { type: 'shop', time: '16:30', title: 'SteP SPORTS Run City Osaka', icon: 'shoe-prints', detail: '位於茶屋町，LOFT對面，跑者聖地' },
-                    { type: 'transport', time: '15 分鐘', title: '步行', icon: 'person-walking', routes: ["茶屋町 → 穿越梅田地下街 (跟隨 Sky Building 指標) → 藍天大廈"] },
-                    { type: 'activity', time: '18:00', title: '梅田藍天大廈', icon: 'sun', detail: '空中庭園展望台看夕陽漸層至夜景' },
-                    { type: 'transport', time: '15 分鐘', title: '返回飯店', icon: 'train-subway', routes: [
+                    { type: 'shop', time: '15:30', title: '梅田 Loft', icon: 'bag-shopping', detail: '集中採購：美術用品' },
+                    { type: 'shop', time: '16:30', title: 'SteP SPORTS Run City Osaka', icon: 'shoe-prints', detail: '位於茶屋町，LOFT對面，跑者聖地，專業跑鞋' },
+                    { type: 'transport', time: '15 分鐘', title: '梅田茶屋町 ➔ 梅田藍天大廈', icon: 'person-walking', routes: ["茶屋町 → 穿越梅田地下街 (跟隨 Sky Building 指標) → 藍天大廈"] },
+                    { type: 'activity', time: '18:00', title: '空中庭園展望台', icon: 'sun', detail: '地點：梅田藍天大廈，看夕陽漸層至夜景' },
+                    { type: 'transport', time: '15 分鐘', title: '梅田藍天大廈 ➔ 東急stay大阪本町酒店', icon: 'train-subway', routes: [
                         "進站：梅田站 (M16)",
                         "搭乘：大阪地下鐵 御堂筋線 (往天王寺/中百舌鳥)",
                         "下車：本町站 (M18)"
@@ -353,7 +352,7 @@
                 day: 6, date: "02/21(六)", title: "奈良小鹿與菓子", weather: "12°C", weatherIcon: "sun",
                 timeline: [
                     { type: 'activity', time: '09:00', title: '前往奈良', icon: 'train', detail: '從大阪出發，準備前往奈良古都' },
-                    { type: 'transport', time: '約 50 分鐘', title: '飯店 ➔ 奈良', icon: 'train', isLong: true, routes: [
+                    { type: 'transport', time: '約 50 分鐘', title: '東急stay大阪本町酒店 ➔ 近鐵奈良站', icon: 'train', isLong: true, routes: [
                         "進站：本町站 (M18)",
                         "搭乘：大阪地下鐵 御堂筋線 (往天王寺/中百舌鳥)",
                         "下車：難波站 (M20)",
@@ -362,14 +361,14 @@
                         "下車：近鐵奈良站",
                         "出口：東改札口"
                     ] },
-                    { type: 'activity', time: '10:00', title: '東大寺與奈良公園', icon: 'paw', detail: '世界遺產大佛殿巡禮、晨間與小鹿互動' },
-                    { type: 'transport', time: '10 分鐘', title: '步行', icon: 'person-walking', routes: ["穿越奈良公園，往二月堂方向，緩步上坡即可抵達若草山"] },
-                    { type: 'activity', time: '13:30', title: '若草山絕景行山', icon: 'person-hiking', detail: '體驗：漫步登上開闊的草地山坡，與小鹿相伴，俯瞰奈良古都全景' },
-                    { type: 'transport', time: '15 分鐘', title: '步行', icon: 'person-walking', routes: ["下山往近鐵奈良站/奈良町方向"] },
-                    { type: 'shop', time: '15:30', title: '鹿猿狐包袱小路', icon: 'gift', detail: '中川政七旗艦店：日本工藝生活家品' },
-                    { type: 'transport', time: '10 分鐘', title: '步行', icon: 'person-walking', routes: ["沿著町家老街步行至茶道體驗處"] },
-                    { type: 'activity', time: '17:00', title: '奈良町茶道與和菓子', icon: 'bowl-food', detail: '體驗：在百年町家內參與傳統茶道，親手製作和菓子' },
-                    { type: 'transport', time: '約 50 分鐘', title: '返回飯店', icon: 'train-subway', isLong: true, routes: [
+                    { type: 'activity', time: '10:00', title: '東大寺', icon: 'paw', detail: '活動：東大寺與奈良公園 (世界遺產大佛殿巡禮、晨間與小鹿互動)' },
+                    { type: 'transport', time: '10 分鐘', title: '東大寺 ➔ 奈良 若草山', icon: 'person-walking', routes: ["穿越奈良公園，往二月堂方向，緩步上坡即可抵達若草山"] },
+                    { type: 'activity', time: '13:30', title: '奈良 若草山', icon: 'person-hiking', detail: '體驗：絕景行山 (漫步登上開闊的草地山坡，與小鹿相伴，俯瞰奈良古都全景)' },
+                    { type: 'transport', time: '15 分鐘', title: '奈良 若草山 ➔ 鹿猿狐包袱小路', icon: 'person-walking', routes: ["下山往近鐵奈良站/奈良町方向"] },
+                    { type: 'shop', time: '15:30', title: '鹿猿狐包袱小路', icon: 'gift', detail: '逛街：中川政七旗艦店 (日本工藝生活家品)' },
+                    { type: 'transport', time: '10 分鐘', title: '鹿猿狐包袱小路 ➔ 奈良町', icon: 'person-walking', routes: ["沿著町家老街步行至茶道體驗處"] },
+                    { type: 'activity', time: '17:00', title: '奈良町', icon: 'bowl-food', detail: '體驗：茶道與和菓子 (在百年町家內參與傳統茶道，親手製作和菓子)' },
+                    { type: 'transport', time: '約 50 分鐘', title: '近鐵奈良站 ➔ 東急stay大阪本町酒店', icon: 'train-subway', isLong: true, routes: [
                         "進站：近鐵奈良站",
                         "搭乘：近鐵奈良線 快速急行 (往大阪難波/尼崎/神戶三宮)",
                         "下車：大阪難波站",
@@ -383,8 +382,8 @@
             { 
                 day: 7, date: "02/22(日)", title: "和歌山聖地奧之院", weather: "13°C", weatherIcon: "cloud-sun", 
                 timeline: [
-                    { type: 'hotel', time: '09:30', title: 'Check-out & 寄放行李', icon: 'bed', detail: '將大件行李寄放大阪飯店或車站，輕裝前往' },
-                    { type: 'transport', time: '約 90 分鐘', title: '大阪 ➔ 和歌山', icon: 'train', isLong: true, routes: [
+                    { type: 'hotel', time: '09:30', title: '東急stay大阪本町酒店', icon: 'bed', detail: 'Check-out & 寄放行李 (將大件行李寄放大阪飯店或車站，輕裝前往)' },
+                    { type: 'transport', time: '約 90 分鐘', title: '本町站 ➔ 和歌山市站', icon: 'train', isLong: true, routes: [
                         "進站：本町站 (M18)",
                         "搭乘：大阪地下鐵 御堂筋線 (往天王寺/中百舌鳥)",
                         "下車：難波站 (M20)",
@@ -393,8 +392,8 @@
                         "下車：和歌山市站",
                         "轉乘：公車/計程車前往和歌山城旁飯店"
                     ] },
-                    { type: 'hotel', time: '11:00', title: '飯店 Check-in (寄放)', icon: 'bed', detail: '和歌山大和ROYNET酒店' },
-                    { type: 'transport', time: '約 120 分鐘', title: '和歌山 ➔ 高野山', icon: 'car', isLong: true, routes: [
+                    { type: 'hotel', time: '11:00', title: '和歌山大和ROYNET酒店', icon: 'bed', detail: 'Check-in (寄放行李)' },
+                    { type: 'transport', time: '約 120 分鐘', title: '和歌山市區 ➔ 奧之院', icon: 'car', isLong: true, routes: [
                         "【方案 A (租車/包車 - 推薦)】",
                         "從和歌山市區出發，約 90-120 分鐘直達奧之院口",
                         "【方案 B (電車)】",
@@ -403,8 +402,8 @@
                         "轉乘 高野山纜車 → 高野山站",
                         "轉乘 南海林間巴士 → 奧之院口"
                     ] },
-                    { type: 'activity', time: '14:30', title: '高野山 奧之院', icon: 'torii-gate', detail: '日本佛教聖地，漫步於千年杉木林參道，感受莊嚴肅穆的氛圍' },
-                    { type: 'transport', time: '約 90 分鐘', title: '高野山 ➔ 和歌山市區', icon: 'car', isLong: true, routes: [
+                    { type: 'activity', time: '14:30', title: '奧之院', icon: 'torii-gate', detail: '參拜：高野山 (日本佛教聖地，漫步於千年杉木林參道，感受莊嚴肅穆的氛圍)' },
+                    { type: 'transport', time: '約 90 分鐘', title: '奧之院 ➔ 和歌山市區', icon: 'car', isLong: true, routes: [
                         "【方案 A (自駕/包車 - 約 90 分)】",
                         "起點：奧之院前停車場 / 中之橋",
                         "路線：國道 371 號 / 480 號 (下山)",
@@ -419,41 +418,41 @@
                         "轉乘：橋本站 → JR 和歌山線 (往和歌山)",
                         "下車：JR 和歌山站"
                     ] },
-                    { type: 'activity', time: '17:00', title: '和歌山城 (外圍)', icon: 'landmark', detail: '欣賞點燈後的和歌山城夜景' },
-                    { type: 'transport', time: '10 分鐘', title: '步行 / 巴士', icon: 'bus', routes: ["前往井出商店"] },
+                    { type: 'activity', time: '17:00', title: '和歌山城', icon: 'landmark', detail: '活動：外圍欣賞點燈後的和歌山城夜景' },
+                    { type: 'transport', time: '10 分鐘', title: '和歌山城 ➔ 井出商店', icon: 'bus', routes: ["步行或搭乘巴士前往"] },
                     { type: 'food', time: '18:30', title: '井出商店', icon: 'utensils', detail: '晚餐：品嚐全日本知名的正宗和歌山拉麵 (豚骨醬油)' },
-                    { type: 'transport', time: '10 分鐘', title: '返回飯店', icon: 'person-walking', routes: ["散步返回和歌山大和ROYNET酒店休息"] }
+                    { type: 'transport', time: '10 分鐘', title: '井出商店 ➔ 和歌山大和ROYNET酒店', icon: 'person-walking', routes: ["散步返回和歌山大和ROYNET酒店休息"] }
                 ]
             },
             { 
                 day: 8, date: "02/23(一)", title: "回家摸喵喵", weather: "14°C", weatherIcon: "sun", 
                 timeline: [
-                    { type: 'hotel', time: '09:00', title: 'Check-out', icon: 'bed', detail: '' },
-                    { type: 'transport', time: '約 15 分鐘', title: '飯店 ➔ JR 和歌山站', icon: 'bus', routes: [
+                    { type: 'hotel', time: '09:00', title: '和歌山大和ROYNET酒店', icon: 'bed', detail: 'Check-out' },
+                    { type: 'transport', time: '約 15 分鐘', title: '和歌山大和ROYNET酒店 ➔ JR 和歌山站', icon: 'bus', routes: [
                         "上車：公園前巴士站 (飯店附近)",
                         "搭乘：和歌山巴士 (往 JR 和歌山站)",
                         "下車：JR 和歌山站"
                     ] },
-                    { type: 'transport', time: '約 30 分鐘', title: '和歌山站 ➔ 貴志站', icon: 'train-tram', isLong: true, routes: [
+                    { type: 'transport', time: '約 30 分鐘', title: 'JR 和歌山站 ➔ 貴志站', icon: 'train-tram', isLong: true, routes: [
                         "進站：JR 和歌山站 (9號月台)",
                         "搭乘：和歌山電鐵 貴志川線",
                         "下車：貴志站 (終點站)"
                     ] },
-                    { type: 'activity', time: '10:00', title: '探訪貓咪站長', icon: 'cat', detail: '參觀車站與貓咪站長 (二代玉/四代玉)，逛車站商店' },
-                    { type: 'transport', time: '30 分鐘', title: '貴志 ➔ 和歌山站', icon: 'train-tram', isLong: true, routes: [
+                    { type: 'activity', time: '10:00', title: '貴志站', icon: 'cat', detail: '活動：探訪貓咪站長 (參觀車站與貓咪站長 二代玉/四代玉，逛車站商店)' },
+                    { type: 'transport', time: '30 分鐘', title: '貴志站 ➔ JR 和歌山站', icon: 'train-tram', isLong: true, routes: [
                         "進站：貴志站",
                         "搭乘：和歌山電鐵 貴志川線 (往和歌山)",
                         "下車：JR 和歌山站"
                     ] },
-                    { type: 'transport', time: '30 分鐘', title: '和歌山站 ➔ 雜賀崎', icon: 'bus', isLong: true, routes: [
+                    { type: 'transport', time: '30 分鐘', title: 'JR 和歌山站 ➔ 雜賀崎遊園', icon: 'bus', isLong: true, routes: [
                         "上車：JR 和歌山站巴士總站",
                         "搭乘：和歌山巴士 (往雜賀崎方向)",
-                        "下車：雜賀崎遊園"
+                        "下車：雜賀崎遊園 (註：此為公車站名，下車步行至漁港)"
                     ] },
-                    { type: 'activity', time: '13:30', title: '雜賀崎漁港', icon: 'camera', detail: '有「日本阿瑪菲」之稱的浪漫復古海岸' },
-                    { type: 'transport', time: '5 分鐘', title: '步行', icon: 'person-walking', routes: ["沿著海岸線前往海景咖啡廳"] },
-                    { type: 'cafe', time: '15:00', title: '海邊絕景咖啡廳', icon: 'mug-hot', detail: '享受旅行最後的看海放空時光' },
-                    { type: 'transport', time: '約 60 分鐘', title: '雜賀崎 ➔ 臨空城', icon: 'train', isLong: true, routes: [
+                    { type: 'activity', time: '13:30', title: '雜賀崎漁港', icon: 'camera', detail: '景點：有「日本阿瑪菲」之稱的浪漫復古海岸' },
+                    { type: 'transport', time: '5 分鐘', title: '雜賀崎漁港 ➔ 雜賀崎', icon: 'person-walking', routes: ["沿著海岸線前往海景咖啡廳"] },
+                    { type: 'cafe', time: '15:00', title: '雜賀崎', icon: 'mug-hot', detail: '海邊絕景咖啡廳 (享受旅行最後的看海放空時光)' },
+                    { type: 'transport', time: '約 60 分鐘', title: '雜賀崎 ➔ 臨空城站', icon: 'train', isLong: true, routes: [
                         "上車：雜賀崎遊園",
                         "搭乘：和歌山巴士 (往南海和歌山市站)",
                         "轉乘：南海電鐵 和歌山市站",
@@ -461,12 +460,12 @@
                         "下車：臨空城站 (Rinku Town)"
                     ] },
                     { type: 'shop', time: '16:30', title: '臨空城 Outlet', icon: 'bag-shopping', detail: '最後血拼：集中掃貨各大運動品牌的跑步、網球鞋與服飾' },
-                    { type: 'transport', time: '10 分鐘', title: '臨空城 ➔ 關西機場', icon: 'train', routes: [
+                    { type: 'transport', time: '10 分鐘', title: '臨空城站 ➔ 關西機場站', icon: 'train', routes: [
                         "進站：臨空城站",
                         "搭乘：JR 或 南海電鐵 (往關西機場)",
                         "下車：關西機場站"
                     ] },
-                    { type: 'activity', time: '20:30', title: '抵達關西機場 T2', icon: 'plane-departure', detail: '前往 T2 (樂桃航空) 辦理報到、免稅店最後採購物產與伴手禮' },
+                    { type: 'activity', time: '20:30', title: '關西國際機場 第二航廈', icon: 'plane-departure', detail: '前往 T2 (樂桃航空) 辦理報到、免稅店最後採購物產與伴手禮' },
                     { type: 'transport', time: '23:00', title: '搭乘 MM069 航班', icon: 'plane', detail: '帶著滿滿回憶返回，於 02/24 凌晨抵達' }
                 ]
             }
@@ -474,16 +473,16 @@
 
         // SAVED_SPOTS updated with hours, closed days and new shops
         const SAVED_SPOTS = [
-            { id: 1, name: "榮町通 Sakaemachi", category: "Shop", icon: "pen-nib", region: "神戶", tags: ["文具", "選物"], note: "隱藏舊大樓的特色小店", day: "Day 2", address: "神戶市中央區榮町通", hours: "11:00-19:00", closed: "不定休" },
+            { id: 1, name: "神戸 栄町通 (Sakaemachi)", category: "Shop", icon: "pen-nib", region: "神戶", tags: ["文具", "選物"], note: "隱藏舊大樓的特色小店", day: "Day 2", address: "神戶市中央區榮町通", hours: "11:00-19:00", closed: "不定休" },
             { id: 18, name: "Sports Depo 天王寺店", category: "Shop", icon: "shirt", region: "大阪", tags: ["運動", "購物"], note: "商品齊全的運動用品專賣店", day: "Day 4", address: "大阪市阿倍野區 Q's Mall", hours: "10:00-22:00", closed: "無" },
             { id: 3, name: "南堀江 Orange Street", category: "Shop", icon: "tent", region: "大阪", tags: ["山系服飾", "家品"], note: "網羅戶外品牌與質感傢俱", day: "Day 5", address: "大阪市西區南堀江", hours: "11:00-20:00", closed: "無" },
             { id: 4, name: "梅田 LOFT", category: "Shop", icon: "paintbrush", region: "大阪", tags: ["美術"], note: "一站買齊所有繪畫與設計工具", day: "Day 5", address: "大阪市北區茶屋町", hours: "11:00-21:00", closed: "無" },
             { id: 10, name: "臨空城 Outlets", category: "Shop", icon: "shoe-prints", region: "大阪", tags: ["血拼"], note: "登機前採購，匯集運動服飾", day: "Day 8", address: "大阪府泉佐野市", hours: "10:00-20:00", closed: "年1次 (2月)" },
             { id: 12, name: "相生芳 Aioifuku", category: "Food", icon: "house-chimney", region: "大阪", tags: ["懷石料理"], note: "隱身市區的百年料亭，展現靜謐", day: "待排程", address: "大阪市中央區高麗橋", hours: "11:30-22:00", closed: "週日" },
-            { id: 5, name: "若草山行山路線", category: "Experience", icon: "person-hiking", region: "奈良", tags: ["行山"], note: "浪漫草地山坡，與鹿共賞全景", day: "Day 6", address: "奈良市雜司町", hours: "全天開放", closed: "無" },
+            { id: 5, name: "奈良 若草山", category: "Experience", icon: "person-hiking", region: "奈良", tags: ["行山"], note: "浪漫草地山坡，與鹿共賞全景", day: "Day 6", address: "奈良市雜司町", hours: "全天開放", closed: "無" },
             { id: 6, name: "中川政七商店", category: "Shop", icon: "gift", region: "奈良", tags: ["家品"], note: "絕美複合空間，生活道具必逛", day: "Day 6", address: "奈良市元林院町", hours: "10:00-19:00", closed: "無" },
             { id: 13, name: "菊水樓 Kikusuiro", category: "Food", icon: "leaf", region: "奈良", tags: ["歷史建築"], note: "接待皇室名門，挑高落地窗直面綠意", day: "待排程", address: "奈良市高畑町", hours: "11:00-21:00", closed: "週二" },
-            { id: 19, name: "SteP SPORTS Run City Osaka", category: "Shop", icon: "shoe-prints", region: "大阪", tags: ["跑鞋", "專業"], note: "跑者聖地，專業慢跑鞋與裝備挑選", day: "Day 6", address: "大阪市北區茶屋町", hours: "11:00-20:00", closed: "無" },
+            { id: 19, name: "SteP SPORTS Run City Osaka", category: "Shop", icon: "shoe-prints", region: "大阪", tags: ["跑鞋", "專業"], note: "跑者聖地，專業慢跑鞋與裝備挑選", day: "Day 5", address: "大阪市北區茶屋町", hours: "11:00-20:00", closed: "無" },
             { id: 15, name: "高野山 奧之院", category: "Experience", icon: "torii-gate", region: "和歌山", tags: ["世界遺產", "朝聖"], note: "日本佛教聖地，漫步於參道杉木林", day: "Day 7", address: "和歌山縣伊都郡", hours: "全天開放", closed: "無" },
             { id: 7, name: "紀州漆器 蒔繪", category: "Experience", icon: "paintbrush", region: "和歌山", tags: ["手作"], note: "體驗優雅的金粉彩繪工藝", day: "Day 7", address: "和歌山縣", hours: "09:00-17:00", closed: "週三" },
             { id: 8, name: "和歌山城", category: "Sight", icon: "landmark", region: "和歌山", tags: ["歷史"], note: "日本百大名城，夕陽時分散步", day: "Day 7", address: "和歌山市一番丁", hours: "09:00-17:30", closed: "12/29-31" },
@@ -493,7 +492,38 @@
 
         // --- 2. 元件定義 ---
         
-        // TimelineItemCard (保持不變)
+        // Helper function for Google Maps directions
+        const openDirections = (e, title, icon) => {
+            e.stopPropagation();
+            const parts = title.split('➔').map(s => s.trim());
+            if (parts.length >= 2) {
+                const origin = encodeURIComponent(parts[0]);
+                const dest = encodeURIComponent(parts[1]);
+                let mode = 'transit'; 
+                if (icon === 'person-walking') mode = 'walking';
+                if (icon === 'car') mode = 'driving';
+                window.open(`https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${dest}&travelmode=${mode}`, '_blank');
+            } else {
+                 const query = encodeURIComponent(title);
+                 window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+            }
+        };
+
+        // Helper function for Google Maps search
+        const openMap = (e, query) => {
+            e.stopPropagation();
+            const q = encodeURIComponent(query);
+            window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, '_blank');
+        };
+
+        // Helper function for Google Web search
+        const openGoogleSearch = (e, query) => {
+            e.stopPropagation();
+            const q = encodeURIComponent(query);
+            window.open(`https://www.google.com/search?q=${q}`, '_blank');
+        };
+
+        // TimelineItemCard
         const TimelineItemCard = ({ item, theme }) => {
             const [isOpen, setIsOpen] = useState(false);
             const hasRes = !!item.reservation;
@@ -513,7 +543,12 @@
                                     <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md ${item.isLong ? 'bg-[#FEDFE1] text-[#d16b7a]' : 'bg-black/5 text-slate-500'}`}>{item.time}</span>
                                     <span className="text-[13px] font-bold text-slate-700">{item.title}</span>
                                 </div>
-                                {isExpandable && <i className={`fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}></i>}
+                                <div className="flex items-center gap-3">
+                                    <button onClick={(e) => openDirections(e, item.title, item.icon)} className="text-slate-400 hover:text-[#78C2C4] transition-colors">
+                                        <i className="fa-solid fa-route text-sm"></i>
+                                    </button>
+                                    {isExpandable && <i className={`fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}></i>}
+                                </div>
                             </div>
                             {isExpandable && (
                                 <div className={`collapse-content ${isOpen ? 'open' : ''}`}>
@@ -545,7 +580,12 @@
                                 <span className="text-slate-600 font-bold text-sm">{item.time}</span>
                                 <span className="text-slate-800 font-bold text-base">{item.title}</span>
                             </div>
-                            {isExpandable && <i className={`fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}></i>}
+                            <div className="flex items-center gap-3">
+                                <button onClick={(e) => openMap(e, item.title)} className="text-slate-400 hover:text-[#78C2C4] transition-colors">
+                                    <i className="fa-solid fa-location-dot text-sm"></i>
+                                </button>
+                                {isExpandable && <i className={`fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}></i>}
+                            </div>
                         </div>
                         {item.detail && <p className="text-[15px] text-slate-600 font-medium leading-relaxed">{item.detail}</p>}
                         {hasRes && (
@@ -569,18 +609,18 @@
             );
         }
 
-        // RestaurantCard (Update to show closed days)
+        // RestaurantCard
         const RestaurantCard = ({ item }) => {
             const theme = REGION_COLORS[item.region] || COLORS.main;
             return (
                 <div className="glass-card rounded-[24px] p-4 cursor-pointer transition-all hover:bg-white/60">
                     <div className="flex gap-4 items-center">
-                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 border" style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}>
+                        <div onClick={(e) => openGoogleSearch(e, item.name)} className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 border cursor-pointer hover:scale-105 transition-transform" style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}>
                             <i className={`fa-solid fa-${item.icon}`}></i>
                         </div>
                         <div className="flex-1 min-w-0">
                             <div className="flex justify-between items-center mb-1">
-                                <h3 className="font-bold text-slate-800 text-lg truncate pr-2">{item.name}</h3>
+                                <h3 className="font-bold text-slate-800 text-lg truncate pr-2" onClick={(e) => openGoogleSearch(e, item.name)}>{item.name}</h3>
                                 <div className="flex items-center gap-1 bg-yellow-50 px-2 py-0.5 rounded-md border border-yellow-200 flex-shrink-0">
                                     <i className="fa-solid fa-star text-yellow-500 text-xs"></i>
                                     <span className="text-xs font-bold text-slate-700">{item.rating}</span>
@@ -600,7 +640,9 @@
                             <span><i className="fa-regular fa-clock mr-1"></i>{(item.hours || '').split(',')[0]}</span>
                             <span className="text-red-400"><i className="fa-solid fa-ban mr-1"></i>{item.closed}</span>
                         </div>
-                        <div className="flex items-center gap-1"><i className="fa-solid fa-location-dot"></i> {item.address}</div>
+                        <div className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition-colors" onClick={(e) => openMap(e, item.address)}>
+                            <i className="fa-solid fa-location-dot text-slate-300"></i> <span className="underline decoration-dotted">{item.address}</span>
+                        </div>
                     </div>
                 </div>
             );
@@ -687,11 +729,11 @@
                             const theme = REGION_COLORS[spot.region] || COLORS.main;
                             return (
                                 <div key={`s-${spot.id}`} className="glass-card p-4 rounded-2xl flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-xl flex items-center justify-center border" style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}>
+                                    <div onClick={(e) => openGoogleSearch(e, spot.name)} className="w-12 h-12 rounded-xl flex items-center justify-center border cursor-pointer hover:scale-105 transition-transform" style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}>
                                         <i className={`fa-solid fa-${spot.icon}`}></i>
                                     </div>
                                     <div className="flex-1">
-                                        <h4 className="font-bold text-slate-700">{spot.name}</h4>
+                                        <h4 className="font-bold text-slate-700" onClick={(e) => openGoogleSearch(e, spot.name)}>{spot.name}</h4>
                                         <div className="flex items-center gap-2 mt-1 mb-1">
                                             <span className="text-[10px] border px-2 py-0.5 rounded font-bold" style={{ backgroundColor: theme.light, color: theme.text, borderColor: theme.border }}>
                                                 {spot.region}
@@ -703,7 +745,9 @@
                                                 <span><i className="fa-regular fa-clock mr-1 text-slate-300"></i>{spot.hours}</span>
                                                 <span className="text-red-400"><i className="fa-solid fa-ban mr-1"></i>{spot.closed}</span>
                                             </div>
-                                            <div className="flex items-center gap-1"><i className="fa-solid fa-location-dot text-slate-300"></i> {spot.address}</div>
+                                            <div className="flex items-center gap-1 cursor-pointer hover:text-blue-500 transition-colors" onClick={(e) => openMap(e, spot.address)}>
+                                                <i className="fa-solid fa-location-dot text-slate-300"></i> <span className="underline decoration-dotted">{spot.address}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -730,7 +774,13 @@
             const [newNoteTitle, setNewNoteTitle] = useState('');
             const [newNoteContent, setNewNoteContent] = useState('');
 
-            useEffect(() => localStorage.setItem('trip_notes', JSON.stringify(notes)), [notes]);
+            useEffect(() => {
+                try {
+                    localStorage.setItem('trip_notes', JSON.stringify(notes));
+                } catch (e) {
+                    console.error("Storage error", e);
+                }
+            }, [notes]);
 
             const addNote = () => {
                 if (!newNoteTitle) return;
